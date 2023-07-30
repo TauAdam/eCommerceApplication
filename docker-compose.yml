@@ -1,0 +1,22 @@
+# docker-compose.yml
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+
+# version: '3': This line specifies the version of the Docker Compose file format being used. In this case, it uses version 3.
+# services:: This section defines the services (containers) that make up your Docker Compose setup.
+# app:: This is the name of the service. You can choose any name you prefer.
+# build:: This block defines the build configuration for the service.
+# context: .: This line specifies the build context, which is the path to the directory containing the Dockerfile and the application code. In this case, the . represents the current directory.
+# dockerfile: Dockerfile: This line specifies the filename of the Dockerfile to use for building the Docker image. In this case, it's named Dockerfile (assuming it's in the same directory as the docker-compose.yml file).
+# ports:: This block defines the port mappings between the host machine and the container.
+# - 3000:3000: This line maps the port 3001 on the host machine to port 5173 on the container. This basically means that the second port is for your local machine while the first one is for Docker. It allows you to access the Vite React application running inside the container through http://localhost:3000 in your web browser. You can change the first port number (3000) to any available port on your host machine.
+# volumes:: This block defines the volume mappings between the host machine and the container. In Docker, volumes provide a way to persist and share data between the host machine and the container. They allow files and directories to be shared and updated in real time.
+# - .:/app: This line maps the current directory (where the docker-compose.yml file is located) on the host machine to the /app directory inside the container. It enables live code reloading by synchronizing the files between the host and the container.
