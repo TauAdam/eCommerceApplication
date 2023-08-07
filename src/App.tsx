@@ -3,6 +3,8 @@ import { Outlet, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { addContact, removeContact } from './redux/slices/contactSlice'
 import { RootState } from './redux/store/store'
+import Api from 'components/Api/Api'
+import Api2 from 'components/Api/Api2'
 
 function App() {
   const contacts = useSelector((state: RootState) => state.contacts.contacts)
@@ -23,6 +25,8 @@ function App() {
   return (
     <>
       <div id="sidebar">
+        <Api />
+        <Api2 />
         <h1>React Router Contacts</h1>
         <div>
           <form id="search-form" role="search">
