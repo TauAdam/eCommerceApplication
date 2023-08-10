@@ -10,8 +10,15 @@
   src: url('../../assets/fonts/Montserrat-SemiBold.ttf');
 }
 
+a {
+  text-decoration: none;
+}
+
 .registration {
-  max-width: 38rem;
+  margin: auto;
+  width: 50%;
+  max-width: 36rem;
+  height: fit-content;
   padding: 1rem;
   border-radius: 1.8rem;
   background: #EAEAEA;
@@ -28,7 +35,8 @@
 .input {
   display: block;
   margin: 1.25rem auto;
-  width: 50%;
+  width: 80%;
+  max-width: 24rem;
   border-radius: 0.94rem;
   background: #D6D6D6;
   font-size: 0.94rem;
