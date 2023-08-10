@@ -1,11 +1,18 @@
 import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import '../share/login.css'
-import { validateEmail, validatePassword, showErrors } from 'components/share/validation'
+import {
+  validateEmail,
+  validatePassword,
+  showErrors,
+  getSourceImage,
+  getPasswordType,
+} from 'components/share/validation'
 
 function LogIn() {
   const [emailErrors, setEmailErrors] = useState([] as string[])
   const [passwordErrors, setPasswordErrors] = useState([] as string[])
+  const [isShowPassword, setIsShowPassword] = useState(false)
 
   const emailRef = useRef(null)
   const passwordRef = useRef(null)
@@ -44,13 +51,23 @@ function LogIn() {
           {showErrors(emailErrors)}
         </div>
       )}
-      <input
-        type="password"
-        className="input"
-        placeholder="Пароль"
-        ref={passwordRef}
-        onChange={validateForm}
-      ></input>
+      <div className="password-container">
+        <input
+          type={getPasswordType(isShowPassword)}
+          className="input"
+          placeholder="Пароль"
+          ref={passwordRef}
+          onChange={validateForm}
+        ></input>
+        <img
+          src={getSourceImage(isShowPassword)}
+          alt="show hide password"
+          className="password-vision"
+          onClick={() => {
+            setIsShowPassword(!isShowPassword)
+          }}
+        ></img>
+      </div>
       {passwordErrors.length > 0 && (
         <div className="errors">
           Пароль: <br />

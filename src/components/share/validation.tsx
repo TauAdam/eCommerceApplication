@@ -1,5 +1,8 @@
 import React from 'react'
 
+import show from '../../assets/images/password-show.png'
+import hide from '../../assets/images/password-hide.png'
+
 function validateEmail(email: string) {
   const emErrors: string[] = []
   const emailTemplate = /\w+@\w+(.com|.ru)/
@@ -46,4 +49,20 @@ function showErrors(errors: string[]) {
   )
 }
 
-export { validateEmail, validatePassword, showErrors }
+function getSourceImage(isShow: boolean) {
+  if (isShow) {
+    return show
+  } else {
+    return hide
+  }
+}
+
+function getPasswordType(isShow: boolean) {
+  if (isShow) {
+    return 'text'
+  } else {
+    return 'password'
+  }
+}
+
+export { validateEmail, validatePassword, showErrors, getSourceImage, getPasswordType }
