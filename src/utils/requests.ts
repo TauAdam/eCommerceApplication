@@ -70,3 +70,43 @@ export async function makeApiCall() {
 
   return responseData
 }
+
+export async function createCustomer(customerEmail: string, customerPassword: string) {
+  let accessToken = getCookie()
+
+  if (accessToken === null) {
+    await getToken()
+    accessToken = getCookie()
+  }
+
+  const newCustomer = {
+    email: customerEmail,
+    password: customerPassword,
+  }
+
+  console.log('Fetch POSY body:\n', newCustomer)
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/customers`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(newCustomer),
+    })
+
+    if (response.status === 400) {
+      throw new Error('Customer with such email already exists!')
+    }
+    if (!response.ok) {
+      throw new Error('Customer creation failed!')
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}

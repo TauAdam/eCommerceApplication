@@ -8,6 +8,7 @@ import {
   getSourceImage,
   getPasswordType,
 } from 'components/share/validation'
+import { createCustomer } from 'utils/requests'
 
 function SignUp() {
   const [emailErrors, setEmailErrors] = useState([] as string[])
@@ -18,9 +19,22 @@ function SignUp() {
   const passwordRef = useRef(null)
   const passwordSubmitRef = useRef(null)
 
-  function handleRegSubmit() {
+  async function handleRegSubmit() {
     validateForm()
-    // TODO: handle registration
+    if (emailErrors.length || passwordErrors.length) {
+      return
+    } else if (emailRef.current && passwordRef.current) {
+      const emailInput = emailRef.current as HTMLInputElement
+      const passwordInput = passwordRef.current as HTMLInputElement
+
+      const email = emailInput.value
+      const password = passwordInput.value
+
+      const customer = await createCustomer(email, password)
+      if (customer) {
+        console.log('New customer\n', customer)
+      }
+    }
   }
 
   function validateForm() {
