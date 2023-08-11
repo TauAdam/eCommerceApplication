@@ -16,18 +16,15 @@ a {
 
 .registration {
   margin: auto;
-  width: 50%;
-  max-width: 36rem;
   height: fit-content;
   padding: 1rem;
-  border-radius: 1.8rem;
-  background: #EAEAEA;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.10);
+  background: #eaeaea;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
   font-family: Montserrat, sans-serif;
 }
 
 .welcome-text {
-  color: #1C1C27;
+  color: #1c1c27;
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -38,7 +35,7 @@ a {
   width: 80%;
   max-width: 24rem;
   border-radius: 0.94rem;
-  background: #D6D6D6;
+  background: #d6d6d6;
   font-size: 0.94rem;
 }
 
@@ -49,7 +46,7 @@ a {
   border-radius: 0.94rem;
   background: #101010;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -61,7 +58,7 @@ a {
 }
 
 .switch-button {
-  color: #FFA542;
+  color: #ffa542;
   font-size: 0.94rem;
   font-weight: 600;
   cursor: pointer;
@@ -73,7 +70,7 @@ a {
 
 .errors li {
   font-size: 0.6;
-  color: #AA3333;
+  color: #aa3333;
 }
 
 .password-container {

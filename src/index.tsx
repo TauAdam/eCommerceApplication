@@ -10,9 +10,8 @@ import contactReducer from './redux/slices/contactSlice'
 
 import './index.css'
 import ErrorPage from './pages/Error/ErrorPage'
-import Contact from './routers/Contact'
-import LogIn from 'components/LogIn/LogIn'
-import SignUp from 'components/SignUp/SignUp'
+import Registration from 'pages/Registration/Registration'
+import Enter from 'pages/Enter/Enter'
 
 const router = createBrowserRouter([
   {
@@ -21,16 +20,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'contacts/:contactId',
-    element: <Contact />,
-  },
-  {
     path: '/login',
-    element: <LogIn />,
+    element: <Enter />,
+    errorElement: <ErrorPage />,
   },
   {
     path: '/signup',
-    element: <SignUp />,
+    element: <Registration />,
+    errorElement: <ErrorPage />,
   },
 ])
 
