@@ -71,13 +71,19 @@ export async function makeApiCall() {
   return responseData
 }
 
-export async function createCustomer(customerEmail: string, customerPassword: string) {
+async function getAccessToken() {
   let accessToken = getCookie()
 
   if (accessToken === null) {
     await getToken()
     accessToken = getCookie()
   }
+
+  return accessToken
+}
+
+export async function createCustomer(customerEmail: string, customerPassword: string) {
+  const accessToken = await getAccessToken()
 
   const newCustomer = {
     email: customerEmail,
@@ -104,6 +110,38 @@ export async function createCustomer(customerEmail: string, customerPassword: st
 
     const data = await response.json()
     return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
+export async function loginCustomer(customerEmail: string) {
+  // + пароль для авторизации: , customerPassword: string = ''
+  const accessToken = await getAccessToken()
+  const queryParam = `customers/?where=email%3D%22${customerEmail}%22`
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/${queryParam}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Customer creation failed!')
+    }
+
+    const data = await response.json()
+    // if (data.results.password.slice(-4) !== customerPassword.slice(-4)) {
+    //   throw new Error('invalid password!')
+    // } // здесь предполагается проверка пароля
+
+    // localStorage.setItem('user-id', data.results.id) // храним корректно авторизованного пользователя
+
+    return data.results
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message)
