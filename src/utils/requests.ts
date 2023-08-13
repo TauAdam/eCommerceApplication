@@ -117,31 +117,26 @@ export async function createCustomer(customerEmail: string, customerPassword: st
   }
 }
 
-export async function loginCustomer(customerEmail: string) {
-  // + пароль для авторизации: , customerPassword: string = ''
+export async function loginCustomer(customerEmail: string, customerPassword: string = '') {
   const accessToken = await getAccessToken()
-  const queryParam = `customers/?where=email%3D%22${customerEmail}%22`
 
   try {
-    const response = await fetch(`${apiYrl}/${projectKey}/${queryParam}`, {
-      method: 'GET',
+    // https://docs.commercetools.com/api/projects/customers#authenticate-sign-in-customer
+    const response = await fetch(`${apiYrl}/${projectKey}/login`, {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        email: customerEmail,
+        password: customerPassword,
+      }),
     })
 
-    if (!response.ok) {
-      throw new Error('Customer creation failed!')
-    }
-
-    const data = await response.json()
-    // if (data.results.password.slice(-4) !== customerPassword.slice(-4)) {
-    //   throw new Error('invalid password!')
-    // } // здесь предполагается проверка пароля
-
-    // localStorage.setItem('user-id', data.results.id) // храним корректно авторизованного пользователя
-
-    return data.results
+    const authData = await response.json()
+    // localStorage.setItem('customer-id', authData.customer.id) // можем сохранить корректно авторизованного пользователя
+    return authData.customer
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message)

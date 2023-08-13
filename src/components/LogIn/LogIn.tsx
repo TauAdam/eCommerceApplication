@@ -26,13 +26,14 @@ function LogIn() {
       return
     } else if (emailRef.current && passwordRef.current) {
       const emailInput = emailRef.current as HTMLInputElement
-      // const passwordInput = passwordRef.current as HTMLInputElement
+      const passwordInput = passwordRef.current as HTMLInputElement
 
       const email = emailInput.value
-      // const password = passwordInput.value
+      const password = passwordInput.value
 
-      const results: Record<string, string>[] = await loginCustomer(email)
-      results.forEach((customer, index) => console.log('Customer № ' + index + '\n', customer))
+      const results: Record<string, string>[] = (await loginCustomer(email, password)) || [null]
+      console.log(results)
+      // results.forEach((customer, index) => console.log('Customer № ' + index + '\n', customer))
       navigate('/')
     }
   }
