@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import '../share/login.css'
 import {
   validateEmail,
@@ -19,6 +19,8 @@ function SignUp() {
   const passwordRef = useRef(null)
   const passwordSubmitRef = useRef(null)
 
+  const navigate = useNavigate()
+
   async function handleRegSubmit() {
     validateForm()
     if (emailErrors.length || passwordErrors.length) {
@@ -33,6 +35,7 @@ function SignUp() {
       const customer = await createCustomer(email, password)
       if (customer) {
         console.log('New customer\n', customer)
+        navigate('/')
       }
     }
   }

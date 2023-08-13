@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import '../share/login.css'
 import {
   validateEmail,
@@ -18,6 +18,8 @@ function LogIn() {
   const emailRef = useRef(null)
   const passwordRef = useRef(null)
 
+  const navigate = useNavigate()
+
   async function handleLoginSubmit() {
     validateForm()
     if (emailErrors.length || passwordErrors.length) {
@@ -31,6 +33,7 @@ function LogIn() {
 
       const results: Record<string, string>[] = await loginCustomer(email)
       results.forEach((customer, index) => console.log('Customer № ' + index + '\n', customer))
+      navigate('/')
     }
   }
 
