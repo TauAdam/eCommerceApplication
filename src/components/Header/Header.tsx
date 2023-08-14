@@ -7,6 +7,15 @@ import logo from './logo.png'
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  function isLoggedIn() {
+    const customer: string | null = localStorage.getItem('customer') || null
+    if (customer) {
+      return '/'
+    } else {
+      return '/login'
+    }
+  }
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -40,7 +49,7 @@ export default function Header() {
           <li className="nav__item">Detailed Product</li>
           <li className="nav__item">Profile</li>
           <li className={`nav__item ${location.pathname === '/login' ? 'active' : ''}`}>
-            <Link to="/login">Log in</Link>
+            <Link to={isLoggedIn()}>Log in</Link>
           </li>
           <li className={`nav__item ${location.pathname === '/signup' ? 'active' : ''}`}>
             <Link to="/signup">Sign in</Link>

@@ -135,12 +135,12 @@ export async function loginCustomer(customerEmail: string, customerPassword: str
     const authData = await response.json()
     console.log('customer-id: ', authData.customer.id)
     // localStorage.setItem('customer-id', authData.customer.id) // можем сохранить корректно авторизованного пользователя
-    return true
+    return authData.customer.id || null
   } catch (error) {
     if (error instanceof Error) {
       console.error('Login Error:\n', error.message)
     }
-    return false
+    return null
   }
 }
 

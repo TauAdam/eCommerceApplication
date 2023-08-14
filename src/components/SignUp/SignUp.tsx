@@ -4,11 +4,12 @@ import '../share/login.css'
 import {
   validateEmail,
   validatePassword,
-  showErrors,
   getSourceImage,
   getPasswordType,
+  getInputStyle,
 } from 'components/share/validation'
 import { createCustomer } from 'utils/requests'
+import ErrorMessage from 'components/share/errorMessage'
 
 function SignUp() {
   const [emailErrors, setEmailErrors] = useState([] as string[])
@@ -70,21 +71,18 @@ function SignUp() {
       <span className="welcome-text">Регистрация аккаунта</span>
       <input
         type="text"
-        className="input"
+        className={getInputStyle([...emailErrors, signUpError])}
         placeholder="Электронная почта"
         ref={emailRef}
         onChange={validateForm}
       ></input>
       {emailErrors.length > 0 && (
-        <div className="errors">
-          Электронная почта: <br />
-          {showErrors(emailErrors)}
-        </div>
+        <ErrorMessage {...{ errorSource: 'Электронная почта', errors: emailErrors }} />
       )}
       <div className="password-container">
         <input
           type={getPasswordType(isShowPassword)}
-          className="input"
+          className={getInputStyle([...passwordErrors, signUpError])}
           placeholder="Пароль"
           ref={passwordRef}
           onChange={validateForm}
@@ -100,22 +98,16 @@ function SignUp() {
       </div>
       <input
         type={getPasswordType(isShowPassword)}
-        className="input"
+        className={getInputStyle([...passwordErrors, signUpError])}
         placeholder="Повторите пароль"
         ref={passwordSubmitRef}
         onChange={validateForm}
       ></input>
       {passwordErrors.length > 0 && (
-        <div className="errors">
-          Пароль: <br />
-          {showErrors(passwordErrors)}
-        </div>
+        <ErrorMessage {...{ errorSource: 'Пароль', errors: passwordErrors }} />
       )}
       {signUpError && (
-        <div className="errors">
-          Ошибка регистрации <br />
-          {showErrors([signUpError])}
-        </div>
+        <ErrorMessage {...{ errorSource: 'Ошибка регистрации', errors: [signUpError] }} />
       )}
       <button className="submit" onClick={handleRegSubmit}>
         Регистрация

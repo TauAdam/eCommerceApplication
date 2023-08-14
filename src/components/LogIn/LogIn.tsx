@@ -4,11 +4,12 @@ import '../share/login.css'
 import {
   validateEmail,
   validatePassword,
-  showErrors,
   getSourceImage,
   getPasswordType,
+  getInputStyle,
 } from 'components/share/validation'
 import { getCustomerToken, loginCustomer } from 'utils/requests'
+import ErrorMessage from 'components/share/errorMessage'
 
 function LogIn() {
   const [emailErrors, setEmailErrors] = useState([] as string[])
@@ -32,11 +33,14 @@ function LogIn() {
       const email = emailInput.value
       const password = passwordInput.value
 
-      const successLogin: boolean = await loginCustomer(email, password)
+      const customerId: string | null = await loginCustomer(email, password)
 
-      if (successLogin) {
+      if (customerId) {
         setLoginError('')
-        console.log(await getCustomerToken(email, password))
+        const customerInfo = { ...(await getCustomerToken(email, password)) }
+        customerInfo.customer_email = email
+        customerInfo.customer_id = customerId
+        localStorage.setItem('customer', JSON.stringify(customerInfo))
         navigate('/')
       } else {
         setLoginError('Что-то пошло не так, проверьте правильность почты и пароля!')
@@ -62,21 +66,18 @@ function LogIn() {
       <span className="welcome-text">Войти в аккаунт</span>
       <input
         type="text"
-        className="input"
+        className={getInputStyle([...emailErrors, loginError])}
         placeholder="Электронная почта"
         ref={emailRef}
         onChange={validateForm}
       ></input>
       {emailErrors.length > 0 && (
-        <div className="errors">
-          Электронная почта: <br />
-          {showErrors(emailErrors)}
-        </div>
+        <ErrorMessage {...{ errorSource: 'Электронная почта', errors: emailErrors }} />
       )}
       <div className="password-container">
         <input
           type={getPasswordType(isShowPassword)}
-          className="input"
+          className={getInputStyle([...passwordErrors, loginError])}
           placeholder="Пароль"
           ref={passwordRef}
           onChange={validateForm}
@@ -91,16 +92,10 @@ function LogIn() {
         ></img>
       </div>
       {passwordErrors.length > 0 && (
-        <div className="errors">
-          Пароль: <br />
-          {showErrors(passwordErrors)}
-        </div>
+        <ErrorMessage {...{ errorSource: 'Пароль', errors: passwordErrors }} />
       )}
       {loginError && (
-        <div className="errors">
-          Ошибка авторизации <br />
-          {showErrors([loginError])}
-        </div>
+        <ErrorMessage {...{ errorSource: 'Ошибка авторизации', errors: [loginError] }} />
       )}
       <button className="submit" onClick={handleLoginSubmit}>
         Вход

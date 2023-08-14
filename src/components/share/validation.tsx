@@ -49,6 +49,18 @@ function showErrors(errors: string[]) {
   )
 }
 
+function getInputStyle(errors: string[]) {
+  let hasErrors = false
+  for (let i = 0; i < errors.length; i++) {
+    if (errors[i]) hasErrors = true
+  }
+  if (hasErrors) {
+    return 'input input-error'
+  } else {
+    return 'input'
+  }
+}
+
 function getSourceImage(isShow: boolean) {
   if (isShow) {
     return show
@@ -65,4 +77,11 @@ function getPasswordType(isShow: boolean) {
   }
 }
 
-export { validateEmail, validatePassword, showErrors, getSourceImage, getPasswordType }
+export {
+  validateEmail,
+  validatePassword,
+  showErrors,
+  getSourceImage,
+  getPasswordType,
+  getInputStyle,
+}

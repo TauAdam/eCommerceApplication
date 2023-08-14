@@ -39,6 +39,10 @@ a {
   font-size: 0.94rem;
 }
 
+.input-error {
+  border: 2px solid #aa3333;
+}
+
 .submit {
   display: block;
   margin: 0 auto 0.63rem auto;
@@ -75,6 +79,14 @@ a {
   text-align: left;
   font-size: 0.6;
   color: #aa3333;
+}
+
+.error-image {
+  position: relative;
+  top: 0.3rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
 }
 
 .password-container {
