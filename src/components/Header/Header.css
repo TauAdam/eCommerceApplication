@@ -52,6 +52,10 @@ img {
   transition: transform 0.5s ease;
 }
 
+.burger__icon.open {
+  z-index: 3;
+}
+
 .burger__icon.open span:nth-child(1) {
   transform: rotate(-45deg) translate(-5px, 6px);
 }
@@ -111,11 +115,17 @@ img {
   }
 
   .nav__list.open {
+    position: fixed;
+    top: 0;
+    right: 0;
+    transform: translateX(-100%);
+    height: 100vh;
     gap: 10%;
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
     text-decoration: underline;
+    z-index: 2;
   }
 
   .basket {
