@@ -13,6 +13,7 @@ import { createCustomer } from 'utils/requests'
 function SignUp() {
   const [emailErrors, setEmailErrors] = useState([] as string[])
   const [passwordErrors, setPasswordErrors] = useState([] as string[])
+  const [signUpError, setSignUpError] = useState('')
   const [isShowPassword, setIsShowPassword] = useState(false)
 
   const emailRef = useRef(null)
@@ -32,10 +33,17 @@ function SignUp() {
       const email = emailInput.value
       const password = passwordInput.value
 
-      const customer = await createCustomer(email, password)
-      if (customer) {
-        console.log('New customer\n', customer)
-        navigate('/')
+      try {
+        const customer = await createCustomer(email, password)
+        if (customer) {
+          setSignUpError('')
+          console.log('New customer\n', customer)
+          navigate('/')
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          setSignUpError(error.message)
+        }
       }
     }
   }
@@ -101,6 +109,12 @@ function SignUp() {
         <div className="errors">
           Пароль: <br />
           {showErrors(passwordErrors)}
+        </div>
+      )}
+      {signUpError && (
+        <div className="errors">
+          Ошибка регистрации <br />
+          {showErrors([signUpError])}
         </div>
       )}
       <button className="submit" onClick={handleRegSubmit}>

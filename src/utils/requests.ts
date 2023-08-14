@@ -90,7 +90,7 @@ export async function createCustomer(customerEmail: string, customerPassword: st
     password: customerPassword,
   }
 
-  console.log('Fetch POSY body:\n', newCustomer)
+  console.log('Fetch body:\n', newCustomer)
 
   try {
     const response = await fetch(`${apiYrl}/${projectKey}/customers`, {
@@ -102,7 +102,7 @@ export async function createCustomer(customerEmail: string, customerPassword: st
     })
 
     if (response.status === 400) {
-      throw new Error('Customer with such email already exists!')
+      throw new Error('Пользователь c такой почтой уже существует!')
     }
     if (!response.ok) {
       throw new Error('Customer creation failed!')
@@ -111,9 +111,7 @@ export async function createCustomer(customerEmail: string, customerPassword: st
     const data = await response.json()
     return data
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    }
+    throw error
   }
 }
 
@@ -125,7 +123,7 @@ export async function loginCustomer(customerEmail: string, customerPassword: str
     const response = await fetch(`${apiYrl}/${projectKey}/login`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`, //${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -135,8 +133,32 @@ export async function loginCustomer(customerEmail: string, customerPassword: str
     })
 
     const authData = await response.json()
+    console.log('customer-id: ', authData.customer.id)
     // localStorage.setItem('customer-id', authData.customer.id) // можем сохранить корректно авторизованного пользователя
-    return authData.customer
+    return true
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Login Error:\n', error.message)
+    }
+    return false
+  }
+}
+
+export async function getCustomerToken(email: string, password: string) {
+  const myClientId = 'NRuZMmzXpEZWUH1MO6ChBpxM' // TODO: make global variables
+  const myClientSecret = 'HlHla0jmI9H8J9EMsOjF5Mzq4t78Q-Cg'
+  try {
+    const response = await fetch(`${authUrl}/oauth/${projectKey}/customers/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + btoa(`${myClientId}:${myClientSecret}`),
+      },
+      body: `grant_type=password&username=${email}&password=${password}`,
+    })
+
+    const data = await response.json()
+    return data
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message)

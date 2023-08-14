@@ -8,11 +8,12 @@ import {
   getSourceImage,
   getPasswordType,
 } from 'components/share/validation'
-import { loginCustomer } from 'utils/requests'
+import { getCustomerToken, loginCustomer } from 'utils/requests'
 
 function LogIn() {
   const [emailErrors, setEmailErrors] = useState([] as string[])
   const [passwordErrors, setPasswordErrors] = useState([] as string[])
+  const [loginError, setLoginError] = useState('')
   const [isShowPassword, setIsShowPassword] = useState(false)
 
   const emailRef = useRef(null)
@@ -31,10 +32,15 @@ function LogIn() {
       const email = emailInput.value
       const password = passwordInput.value
 
-      const results: Record<string, string>[] = (await loginCustomer(email, password)) || [null]
-      console.log(results)
-      // results.forEach((customer, index) => console.log('Customer № ' + index + '\n', customer))
-      navigate('/')
+      const successLogin: boolean = await loginCustomer(email, password)
+
+      if (successLogin) {
+        setLoginError('')
+        console.log(await getCustomerToken(email, password))
+        navigate('/')
+      } else {
+        setLoginError('Что-то пошло не так, проверьте правильность почты и пароля!')
+      }
     }
   }
 
@@ -88,6 +94,12 @@ function LogIn() {
         <div className="errors">
           Пароль: <br />
           {showErrors(passwordErrors)}
+        </div>
+      )}
+      {loginError && (
+        <div className="errors">
+          Ошибка авторизации <br />
+          {showErrors([loginError])}
         </div>
       )}
       <button className="submit" onClick={handleLoginSubmit}>
