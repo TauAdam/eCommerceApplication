@@ -63,21 +63,18 @@ const Header = () => {
             <Link to="/product">Detailed Product</Link>
           </li>
           <li className={`nav__item ${location.pathname === '/login' ? 'active' : ''}`}>
-            {isAuthenticated ? (
-              <Link to="/profile">My profile</Link>
-            ) : (
-              <Link to="/login">Log in</Link>
-            )}
+            {isAuthenticated ? <Link to="/">Log in</Link> : <Link to="/login">Log in</Link>}
           </li>
           <li className={`nav__item ${location.pathname === '/signup' ? 'active' : ''}`}>
-            {isAuthenticated ? (
+            {isAuthenticated ? <Link to="/">Sign up</Link> : <Link to="/signup">Sign up</Link>}
+          </li>
+          {isAuthenticated && (
+            <li className={`nav__item ${location.pathname === '/exit' ? 'active' : ''}`}>
               <Link to="/" onClick={handleExitClick}>
                 Exit
               </Link>
-            ) : (
-              <Link to="/signup">Sign up</Link>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
       </div>
     </div>
