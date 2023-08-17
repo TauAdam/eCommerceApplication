@@ -24,7 +24,11 @@ function SignUp() {
   const navigate = useNavigate()
 
   async function handleRegSubmit() {
+    // диспатч({email, password})
     validateForm()
+    // запрос
+    //состояние обновляет
+    //редирект
     if (emailErrors.length || passwordErrors.length) {
       return
     } else if (emailRef.current && passwordRef.current) {
