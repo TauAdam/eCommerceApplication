@@ -1,20 +1,33 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
+import { RootState } from 'redux/store/store'
+import { login, logout } from 'redux/store/store'
 
 import './Header.css'
 import logo from './logo.png'
 
-export default function Header() {
+const Header = () => {
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const location = useLocation()
+  const dispatch = useDispatch()
 
-  function isLoggedIn() {
-    const customer: string | null = localStorage.getItem('customer') || null
+  const customer = localStorage.getItem('customer')
+
+  useEffect(() => {
     if (customer) {
-      return '/'
+      dispatch(login())
     } else {
-      return '/login'
+      dispatch(logout())
     }
+  }, [dispatch, customer])
+
+  const handleExitClick = () => {
+    localStorage.removeItem('customer')
   }
+
+  console.log('isAuthenticated:', isAuthenticated)
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -46,16 +59,29 @@ export default function Header() {
           <li className={`nav__item ${location.pathname === '/' ? 'active' : ''}`}>
             <Link to="/">Catalog Product</Link>
           </li>
-          <li className="nav__item">Detailed Product</li>
-          <li className="nav__item">Profile</li>
+          <li className={`nav__item ${location.pathname === '/product' ? 'active' : ''}`}>
+            <Link to="/product">Detailed Product</Link>
+          </li>
           <li className={`nav__item ${location.pathname === '/login' ? 'active' : ''}`}>
-            <Link to={isLoggedIn()}>Log in</Link>
+            {isAuthenticated ? (
+              <Link to="/profile">My profile</Link>
+            ) : (
+              <Link to="/login">Log in</Link>
+            )}
           </li>
           <li className={`nav__item ${location.pathname === '/signup' ? 'active' : ''}`}>
-            <Link to="/signup">Sign in</Link>
+            {isAuthenticated ? (
+              <Link to="/" onClick={handleExitClick}>
+                Exit
+              </Link>
+            ) : (
+              <Link to="/signup">Sign up</Link>
+            )}
           </li>
         </ul>
       </div>
     </div>
   )
 }
+
+export default Header

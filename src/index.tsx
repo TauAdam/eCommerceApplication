@@ -1,17 +1,15 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
 import App from './App'
-import contactReducer from './redux/slices/contactSlice'
 
 import './index.css'
 import ErrorPage from './pages/Error/ErrorPage'
 import Registration from 'pages/Registration/Registration'
 import Enter from 'pages/Enter/Enter'
+import store from 'redux/store/store'
 
 const router = createBrowserRouter([
   {
@@ -30,12 +28,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
 ])
-
-const store = configureStore({
-  reducer: {
-    contacts: contactReducer,
-  },
-})
 
 const rootElement = document.getElementById('root')
 
