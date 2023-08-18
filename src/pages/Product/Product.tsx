@@ -1,0 +1,29 @@
+import Footer from 'components/Footer/Footer'
+import Header from 'components/Header/Header'
+
+import React from 'react'
+import { DetailedProduct } from '../../components/DetailedProduct'
+
+const mockData = {
+  name: 'Wireless Headphones',
+  price: 99.99,
+  image: 'link_to_headphone_image.jpg',
+  description: 'High-quality wireless headphones with noise cancellation.',
+  features: [
+    'Bluetooth connectivity',
+    'Active noise cancellation',
+    'Up to 20 hours of battery life',
+    'Comfortable over-ear design',
+  ],
+}
+export function Product() {
+  return (
+    <div className="wrapperApp">
+      <div className="box">
+        <Header />
+        <DetailedProduct product={mockData} />
+        <Footer />
+      </div>
+    </div>
+  )
+}
