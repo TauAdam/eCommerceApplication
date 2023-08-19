@@ -1,7 +1,6 @@
-import React from 'react'
-
 import show from '../../assets/images/password-show.png'
 import hide from '../../assets/images/password-hide.png'
+import React from 'react'
 
 function validateEmail(email: string) {
   const emErrors: string[] = []
@@ -17,7 +16,7 @@ function validateEmail(email: string) {
   //setEmailErrors(emErrors)
 }
 
-function validatePassword(password: string) {
+function validatePassword(password: string, secondPassword: string | undefined) {
   const passErrors: string[] = []
   const uppercaseLetter = /[A-Z]/
   const lowercaseLetter = /[a-z]/
@@ -35,8 +34,8 @@ function validatePassword(password: string) {
     passErrors.push('должен содержать хотя бы один специальный символ')
   if (password[0] === ' ' || password[password.length - 1] === ' ')
     passErrors.push('содержит пробелы в начале или конце строки')
+  if (secondPassword && password !== secondPassword) passErrors.push('пароли должны совпадать')
   return passErrors
-  // setPasswordErrors(passErrors)
 }
 
 function showErrors(errors: string[]) {

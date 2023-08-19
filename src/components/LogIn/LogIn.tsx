@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../share/login.css'
 import {
-  validateEmail,
-  validatePassword,
+  // validateEmail,
+  // validatePassword,
   getSourceImage,
   getPasswordType,
   getInputStyle,
@@ -50,14 +50,14 @@ function LogIn() {
 
   function validateForm() {
     if (emailRef.current) {
-      const emailInput = emailRef.current as HTMLInputElement
-      const email = emailInput.value
-      setEmailErrors(validateEmail(email))
+      // const emailInput = emailRef.current as HTMLInputElement
+      // const email = emailInput.value
+      // setEmailErrors(validateEmail(email))
     }
     if (passwordRef.current) {
-      const passwordInput = passwordRef.current as HTMLInputElement
-      const password: string = passwordInput.value
-      setPasswordErrors(validatePassword(password))
+      // const passwordInput = passwordRef.current as HTMLInputElement
+      // const password: string = passwordInput.value
+      // setPasswordErrors(validatePassword(password))
     }
   }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { showErrors } from './validation'
 import errorImage from '../../assets/images/error.png'
-import ErrorProp from './types'
+import { ErrorProp } from './types'
 
 export default function ErrorMessage(props: ErrorProp) {
   return (

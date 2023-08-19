@@ -1,3 +1,5 @@
+import { IAddress } from 'components/share/types'
+
 // const region = 'europe-west1'
 const projectKey = 'my-project98'
 const clientId = 'Zn03ugFjIoaOP5zfNAghuaMC'
@@ -82,13 +84,30 @@ async function getAccessToken() {
   return accessToken
 }
 
-export async function createCustomer(customerEmail: string, customerPassword: string) {
+type NewCustomer = {
+  email: string
+  password: string
+  addresses: IAddress[]
+  defaultShippingAddress?: number
+  defaultBillingAddress?: number
+}
+
+export async function createCustomer(
+  customerEmail: string,
+  customerPassword: string,
+  billing: IAddress,
+  shipping: IAddress
+) {
   const accessToken = await getAccessToken()
 
-  const newCustomer = {
+  const newCustomer: NewCustomer = {
     email: customerEmail,
     password: customerPassword,
+    addresses: [{ ...billing }, { ...shipping }],
   }
+
+  if (billing.asDefault) newCustomer.defaultBillingAddress = 0
+  if (shipping.asDefault) newCustomer.defaultShippingAddress = 1
 
   console.log('Fetch body:\n', newCustomer)
 

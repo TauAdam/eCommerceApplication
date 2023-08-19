@@ -1,68 +1,65 @@
-import React, { useState, useRef } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useReducer, ChangeEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../share/login.css'
-import {
-  validateEmail,
-  validatePassword,
-  getSourceImage,
-  getPasswordType,
-  getInputStyle,
-} from 'components/share/validation'
-import { createCustomer } from 'utils/requests'
+import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/validation'
+import { createCustomer, getCustomerToken, loginCustomer } from 'utils/requests'
 import ErrorMessage from 'components/share/errorMessage'
+import { HandleAuthActions, initialState, reducer } from '../share/authReducer'
+import Address from 'components/share/Address'
 
 function SignUp() {
-  const [emailErrors, setEmailErrors] = useState([] as string[])
-  const [passwordErrors, setPasswordErrors] = useState([] as string[])
-  const [signUpError, setSignUpError] = useState('')
-  const [isShowPassword, setIsShowPassword] = useState(false)
+  const [shipping, setShipping] = useState({ ...initialState.shippingAddress })
+  const [billing, setBilling] = useState({ ...initialState.billingAddress })
+  const [duplicateAddress, setDuplicateAddress] = useState(true)
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const actions = new HandleAuthActions(dispatch)
 
-  const emailRef = useRef(null)
-  const passwordRef = useRef(null)
-  const passwordSubmitRef = useRef(null)
+  useEffect(() => {
+    actions.setShippingAddress(shipping)
+  }, [shipping])
+
+  useEffect(() => {
+    actions.setBillingAddress(billing)
+  }, [billing])
 
   const navigate = useNavigate()
 
   async function handleRegSubmit() {
-    validateForm()
-    if (emailErrors.length || passwordErrors.length) {
-      return
-    } else if (emailRef.current && passwordRef.current) {
-      const emailInput = emailRef.current as HTMLInputElement
-      const passwordInput = passwordRef.current as HTMLInputElement
+    if (state.emailErrors.length || state.passwordErrors.length) return
+    try {
+      const customer = await createCustomer(
+        state.email,
+        state.password,
+        state.billingAddress,
+        duplicateAddress ? state.billingAddress : state.shippingAddress
+      )
+      console.log('Created customer\n', customer)
+      const customerId = await loginCustomer(state.email, state.password)
+      const customerInfo = { ...(await getCustomerToken(state.email, state.password)) }
+      customerInfo.customer_email = state.email
+      customerInfo.customer_id = customerId
+      localStorage.setItem('customer', JSON.stringify(customerInfo))
 
-      const email = emailInput.value
-      const password = passwordInput.value
-
-      try {
-        const customer = await createCustomer(email, password)
-        if (customer) {
-          setSignUpError('')
-          console.log('New customer\n', customer)
-          navigate('/')
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          setSignUpError(error.message)
-        }
+      actions.setSubmitError('')
+      navigate('/')
+    } catch (error) {
+      if (error instanceof Error) {
+        actions.setSubmitError(error.message)
       }
     }
   }
 
-  function validateForm() {
-    if (emailRef.current) {
-      const emailInput = emailRef.current as HTMLInputElement
-      const email = emailInput.value
-      setEmailErrors(validateEmail(email))
-    }
-    if (passwordRef.current && passwordSubmitRef.current) {
-      const passwordInput = passwordRef.current as HTMLInputElement
-      const secondPasswordInput = passwordSubmitRef.current as HTMLInputElement
-      const password: string = passwordInput.value
-      const secondPassword: string = secondPasswordInput.value
-      const passErrors = validatePassword(password)
-      if (password !== secondPassword) passErrors.push('пароли должны совпадать')
-      setPasswordErrors(passErrors)
+  function validatePasswordSubmit(event: ChangeEvent<HTMLInputElement>, secondPassword: string) {
+    const password = event.target.value
+    const message = 'пароли должны совпадать'
+    const index = state.passwordErrors.indexOf(message)
+    if (password === secondPassword) {
+      const errors = state.passwordErrors.filter((x) => x !== message)
+      actions.setPasswordErrors(errors)
+      return
+    } else if (index === -1) {
+      actions.setPasswordErrors([...state.passwordErrors, message])
     }
   }
 
@@ -71,43 +68,77 @@ function SignUp() {
       <span className="welcome-text">Регистрация аккаунта</span>
       <input
         type="text"
-        className={getInputStyle([...emailErrors, signUpError])}
+        className={getInputStyle([...state.emailErrors, state.submitError])}
+        value={state.email}
         placeholder="Электронная почта"
-        ref={emailRef}
-        onChange={validateForm}
+        onChange={(event) => {
+          actions.handleEmail(event)
+        }}
       ></input>
-      {emailErrors.length > 0 && (
-        <ErrorMessage {...{ errorSource: 'Электронная почта', errors: emailErrors }} />
+      {state.emailErrors.length > 0 && (
+        <ErrorMessage {...{ errorSource: 'Электронная почта', errors: state.emailErrors }} />
       )}
       <div className="password-container">
         <input
-          type={getPasswordType(isShowPassword)}
-          className={getInputStyle([...passwordErrors, signUpError])}
+          type={getPasswordType(state.showPassword)}
+          className={getInputStyle([...state.passwordErrors, state.submitError])}
           placeholder="Пароль"
-          ref={passwordRef}
-          onChange={validateForm}
+          value={state.password}
+          onChange={(event) => {
+            actions.handlePassword(event, state.passwordSubmit)
+          }}
         ></input>
         <img
-          src={getSourceImage(isShowPassword)}
+          src={getSourceImage(state.showPassword)}
           alt="show hide password"
           className="password-vision"
           onClick={() => {
-            setIsShowPassword(!isShowPassword)
+            actions.setShowPassword(state.showPassword)
           }}
         ></img>
       </div>
       <input
-        type={getPasswordType(isShowPassword)}
-        className={getInputStyle([...passwordErrors, signUpError])}
+        type={getPasswordType(state.showPassword)}
+        className={getInputStyle([...state.passwordErrors, state.submitError])}
+        value={state.passwordSubmit}
         placeholder="Повторите пароль"
-        ref={passwordSubmitRef}
-        onChange={validateForm}
+        onChange={(event) => {
+          actions.setPasswordSubmit(event)
+          validatePasswordSubmit(event, state.password)
+        }}
       ></input>
-      {passwordErrors.length > 0 && (
-        <ErrorMessage {...{ errorSource: 'Пароль', errors: passwordErrors }} />
+      {state.passwordErrors.length > 0 && (
+        <ErrorMessage {...{ errorSource: 'Пароль', errors: state.passwordErrors }} />
       )}
-      {signUpError && (
-        <ErrorMessage {...{ errorSource: 'Ошибка регистрации', errors: [signUpError] }} />
+      {state.submitError && (
+        <ErrorMessage {...{ errorSource: 'Ошибка регистрации', errors: [state.submitError] }} />
+      )}
+
+      <Address
+        {...{
+          addressType: 'для выставления счета',
+          address: billing,
+          setAddress: setBilling,
+        }}
+      />
+      <label className="address-label" style={{ margin: '1.25rem auto' }}>
+        <strong>Использовать как адрес для доставки&nbsp;&nbsp;</strong>
+        <input
+          type="checkbox"
+          defaultChecked={duplicateAddress}
+          onChange={() => {
+            setDuplicateAddress(!duplicateAddress)
+          }}
+        />
+      </label>
+      {!duplicateAddress && (
+        <Address
+          {...{
+            addressType: 'доставки',
+            address: shipping,
+            setAddress: setShipping,
+          }}
+        />
       )}
       <button className="submit" onClick={handleRegSubmit}>
         Регистрация
@@ -116,15 +147,7 @@ function SignUp() {
       <p className="switch-message">
         Есть аккаунт?&nbsp;
         <Link to="/login">
-          <span
-            className="switch-button"
-            onClick={() => {
-              setEmailErrors([])
-              setPasswordErrors([])
-            }}
-          >
-            Войти
-          </span>
+          <span className="switch-button">Войти</span>
         </Link>
       </p>
     </div>
