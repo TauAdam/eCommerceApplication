@@ -26,6 +26,8 @@ a {
 }
 
 .registration {
+  position: relative;
+  max-width: 950px;
   margin: auto;
   height: fit-content;
   padding: 1rem;
@@ -67,6 +69,8 @@ a {
 }
 
 .input-label span {
+  position: absolute;
+  left: 5vw;
   display: block;
   width: 7rem;
   align-self: center;
@@ -140,4 +144,20 @@ a {
   height: 1.5rem;
   width: 1.5rem;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .input-label span {
+    /* position: static; */
+    left: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .input-label span {
+    position: static;
+  }
+  .input-label .input {
+    max-width: 57%;
+  }
 }
