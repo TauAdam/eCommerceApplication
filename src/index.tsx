@@ -10,6 +10,7 @@ import ErrorPage from './pages/Error/ErrorPage'
 import Registration from 'pages/Registration/Registration'
 import Enter from 'pages/Enter/Enter'
 import store from 'redux/store/store'
+import { Product } from './pages/Product/Product'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <Registration />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/product',
+    element: <Product />,
     errorElement: <ErrorPage />,
   },
 ])
