@@ -1,17 +1,15 @@
 import Header from 'components/Header/Header'
-import Promo from 'components/Promo/Promo'
-import Catalog from 'components/Catalog/Catalog'
+import SignUp from 'components/SignUp/SignUp'
 import Footer from 'components/Footer/Footer'
 
 import React from 'react'
 
-export default function Home() {
+export default function Registration() {
   return (
     <div className="wrapperApp">
       <div className="box">
         <Header />
-        <Promo />
-        <Catalog />
+        <SignUp />
         <Footer />
       </div>
     </div>
