@@ -1,7 +1,6 @@
 import React from 'react'
-import { useRouteError } from 'react-router-dom'
+import { Link, useLocation, useRouteError } from 'react-router-dom'
 import './ErrorPage.css'
-import MainButton from 'components/MainButton/MainButton'
 
 interface CustomError {
   statusText?: string
@@ -10,18 +9,22 @@ interface CustomError {
 
 function ErrorPage() {
   const error = useRouteError() as CustomError | undefined
+  const location = useLocation()
 
   if (error) {
-    console.error(error)
-
     return (
-      <div id="error-page">
-        <h1>Oops!</h1>
-        <p>Sorry, there is no such page, or I didn&apos;t find it</p>
-        <MainButton />
-        <p>
-          <i>{error.statusText || error.message}</i>
+      <div className="error-page">
+        <h1 className="error-title">Oops! 404</h1>
+        <p className="error-text">
+          <i className="error-highlight">{error.statusText || error.message}</i>
         </p>
+        <p className="error-text">
+          Sorry, there is no <strong className="error-highlight">{location.pathname}</strong> page,
+          or I didn&apos;t find it
+        </p>
+        <Link to="/" className="error-link">
+          Return to Main Page
+        </Link>
       </div>
     )
   }
