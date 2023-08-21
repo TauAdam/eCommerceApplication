@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouteError } from 'react-router-dom'
 import './ErrorPage.css'
+import MainButton from 'components/MainButton/MainButton'
 
 interface CustomError {
   statusText?: string
@@ -16,7 +17,8 @@ function ErrorPage() {
     return (
       <div id="error-page">
         <h1>Oops!</h1>
-        <p>Сорян, такой страницы нет, или я её не нашёл</p>
+        <p>Sorry, there is no such page, or I didn&apos;t find it</p>
+        <MainButton />
         <p>
           <i>{error.statusText || error.message}</i>
         </p>
