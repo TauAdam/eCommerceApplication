@@ -23,6 +23,15 @@ const initialState = {
   shippingAddress: { ...initialAddress },
 }
 
+const initialLoginState = {
+  email: '1@2.com',
+  password: 'QWEqwe1!',
+  emailErrors: [],
+  passwordErrors: [],
+  submitError: '',
+  showPassword: false,
+}
+
 const reducer = (state: IAuthState, action: authActionType): IAuthState => {
   switch (action.type) {
     case AUTH_ACTION_TYPES.SET_EMAIL:
@@ -155,4 +164,4 @@ class HandleAuthActions {
   }
 }
 
-export { reducer, initialState, initialAddress, HandleAuthActions }
+export { reducer, initialState, initialLoginState, initialAddress, HandleAuthActions }
