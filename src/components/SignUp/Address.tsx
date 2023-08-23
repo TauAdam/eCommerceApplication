@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react'
-import { AddressProp } from './types'
-import ErrorMessage from './errorMessage'
-import './login.css'
-import { getInputStyle } from './validation'
+import { AddressProp } from '../share/types'
+import ErrorMessage from '../share/errorMessage'
+import '../share/login.css'
+import { getInputStyle } from '../share/validation'
 
 export default function Address(props: AddressProp) {
   const [def, setDef] = useState(false)

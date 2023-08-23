@@ -5,8 +5,8 @@ import '../share/login.css'
 import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/validation'
 import { createCustomer, getCustomerToken, loginCustomer } from 'utils/requests'
 import ErrorMessage from 'components/share/errorMessage'
-import { HandleAuthActions, initialState, reducer } from '../share/authReducer'
-import Address from 'components/share/Address'
+import { HandleAuthActions, initialState, reducer } from './authReducer'
+import Address from 'components/SignUp/Address'
 
 function SignUp() {
   const [shipping, setShipping] = useState({ ...initialState.shippingAddress })

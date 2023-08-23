@@ -16,7 +16,7 @@ function validateEmail(email: string) {
   //setEmailErrors(emErrors)
 }
 
-function validatePassword(password: string, secondPassword: string | undefined) {
+function validatePassword(password: string, secondPassword: string | undefined = undefined) {
   const passErrors: string[] = []
   const uppercaseLetter = /[A-Z]/
   const lowercaseLetter = /[a-z]/
