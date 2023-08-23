@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import { RootState } from 'redux/store/store'
-import { login, logout } from 'redux/store/store'
+import { RootState, login, logout } from 'redux/store/store'
 
 import './Header.css'
 import logo from './logo.png'
@@ -63,10 +62,10 @@ const Header = () => {
             <Link to="/product">Detailed Product</Link>
           </li>
           <li className={`nav__item ${location.pathname === '/login' ? 'active' : ''}`}>
-            {isAuthenticated ? <Link to="/">Log in</Link> : <Link to="/login">Log in</Link>}
+            <Link to="/login">Log in</Link>
           </li>
           <li className={`nav__item ${location.pathname === '/signup' ? 'active' : ''}`}>
-            {isAuthenticated ? <Link to="/">Sign up</Link> : <Link to="/signup">Sign up</Link>}
+            <Link to="/signup">Sign up</Link>
           </li>
           {isAuthenticated && (
             <li className={`nav__item ${location.pathname === '/exit' ? 'active' : ''}`}>
