@@ -87,6 +87,9 @@ async function getAccessToken() {
 type NewCustomer = {
   email: string
   password: string
+  firstName: string
+  lastName: string
+  dateOfBirth: string
   addresses: IAddress[]
   defaultShippingAddress?: number
   defaultBillingAddress?: number
@@ -95,6 +98,9 @@ type NewCustomer = {
 export async function createCustomer(
   customerEmail: string,
   customerPassword: string,
+  customerFirstName: string,
+  customerLastName: string,
+  customerDateOfBirth: string,
   billing: IAddress,
   shipping: IAddress
 ) {
@@ -103,6 +109,9 @@ export async function createCustomer(
   const newCustomer: NewCustomer = {
     email: customerEmail,
     password: customerPassword,
+    firstName: customerFirstName,
+    lastName: customerLastName,
+    dateOfBirth: customerDateOfBirth,
     addresses: [{ ...billing }, { ...shipping }],
   }
 

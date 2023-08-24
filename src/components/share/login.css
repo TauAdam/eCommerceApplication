@@ -15,6 +15,7 @@ a {
 }
 
 .address-header {
+  font-size: 1rem;
   width: fit-content;
   margin: 0.5rem auto;
 }
@@ -37,6 +38,9 @@ a {
 }
 
 .welcome-text {
+  display: block;
+  margin: 0 auto;
+  width: fit-content;
   color: #1c1c27;
   font-size: 1.25rem;
   font-weight: 600;
@@ -45,6 +49,7 @@ a {
 .input {
   display: block;
   margin: 1.25rem auto;
+  padding: 0.5rem 0.75rem;
   width: 80%;
   max-width: 24rem;
   border-radius: 0.94rem;
@@ -65,6 +70,8 @@ a {
 .address-container .input-label {
   display: flex;
   justify-content: center;
+  position: relative;
+  right: 3.5rem;
   width: 80%;
 }
 
@@ -73,6 +80,7 @@ a {
   left: 5vw;
   display: block;
   width: 7rem;
+  font-size: 0.75rem;
   align-self: center;
   text-align: end;
 }
