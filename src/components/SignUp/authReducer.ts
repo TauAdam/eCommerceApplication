@@ -4,6 +4,7 @@ import { ChangeEvent } from 'react'
 
 const initialAddress: IAddress = {
   country: 'US',
+  postalCode: '10000',
   city: 'New York',
   streetName: 'Ilon Mask',
   building: '1',
@@ -19,6 +20,9 @@ const initialState = {
   passwordErrors: [],
   submitError: '',
   showPassword: false,
+  firstName: 'John',
+  lastName: 'Down',
+  dateOfBirth: '2010-08-20',
   billingAddress: { ...initialAddress },
   shippingAddress: { ...initialAddress },
 }
@@ -78,6 +82,21 @@ const reducer = (state: IAuthState, action: authActionType): IAuthState => {
       return {
         ...state,
         shippingAddress: action.payload as IAddress,
+      }
+    case AUTH_ACTION_TYPES.SET_NAME:
+      return {
+        ...state,
+        firstName: action.payload as string,
+      }
+    case AUTH_ACTION_TYPES.SET_LASTNAME:
+      return {
+        ...state,
+        lastName: action.payload as string,
+      }
+    case AUTH_ACTION_TYPES.SET_BIRTH_DATE:
+      return {
+        ...state,
+        dateOfBirth: action.payload as string,
       }
     default:
       return state
@@ -160,6 +179,27 @@ class HandleAuthActions {
     this.dispatch({
       type: AUTH_ACTION_TYPES.SET_SHIPPING_ADDRESS,
       payload: address,
+    })
+  }
+
+  setName(name: string) {
+    this.dispatch({
+      type: AUTH_ACTION_TYPES.SET_NAME,
+      payload: name,
+    })
+  }
+
+  setLastName(lastName: string) {
+    this.dispatch({
+      type: AUTH_ACTION_TYPES.SET_LASTNAME,
+      payload: lastName,
+    })
+  }
+
+  setBirthDate(dateOfBirth: string) {
+    this.dispatch({
+      type: AUTH_ACTION_TYPES.SET_BIRTH_DATE,
+      payload: dateOfBirth,
     })
   }
 }

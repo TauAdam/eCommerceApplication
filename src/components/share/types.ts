@@ -3,12 +3,25 @@ interface ErrorProp {
   errors: string[]
 }
 
-type PropFunction = (address: IAddress) => void
+type AddressPropFunction = (address: IAddress) => void
+type PersonalPropFunction = (data: string) => void
+type ComponentErrorsFunction = (hasErrors: boolean) => void
 
 interface AddressProp {
   addressType: string
   address: IAddress
-  setAddress: PropFunction
+  setAddress: AddressPropFunction
+  setComponentErrors: ComponentErrorsFunction
+}
+
+interface PersonalProp {
+  name: string
+  setName: PersonalPropFunction
+  lastName: string
+  setLastName: PersonalPropFunction
+  dateOfBirth: string
+  setDateOfBirth: PersonalPropFunction
+  setComponentErrors: ComponentErrorsFunction
 }
 
 enum AUTH_ACTION_TYPES {
@@ -21,6 +34,9 @@ enum AUTH_ACTION_TYPES {
   SET_PASSWORD_SHOW = 'SET_PASSWORD_SHOW',
   SET_BILLING_ADDRESS = 'SET_BILLING_ADDRESS',
   SET_SHIPPING_ADDRESS = 'SET_SHIPPING_ADDRESS',
+  SET_NAME = 'SET_NAME',
+  SET_LASTNAME = 'SET_LASTNAME',
+  SET_BIRTH_DATE = 'SET_BIRTH_DATE',
 }
 
 type authActionType = {
@@ -30,6 +46,7 @@ type authActionType = {
 
 interface IAddress {
   country: string
+  postalCode: string
   city: string
   streetName: string
   building: string
@@ -45,8 +62,19 @@ interface IAuthState {
   passwordErrors: string[]
   submitError: string
   showPassword: boolean
+  firstName: string
+  lastName: string
+  dateOfBirth: string
   billingAddress: IAddress
   shippingAddress: IAddress
 }
 
-export { ErrorProp, AddressProp, AUTH_ACTION_TYPES, authActionType, IAuthState, IAddress }
+export {
+  ErrorProp,
+  AddressProp,
+  PersonalProp,
+  AUTH_ACTION_TYPES,
+  authActionType,
+  IAuthState,
+  IAddress,
+}

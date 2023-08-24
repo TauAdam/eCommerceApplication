@@ -7,12 +7,19 @@ import { createCustomer, getCustomerToken, loginCustomer } from 'utils/requests'
 import ErrorMessage from 'components/share/errorMessage'
 import { HandleAuthActions, initialState, reducer } from './authReducer'
 import Address from 'components/SignUp/Address'
+import Personal from './Personal'
 
 function SignUp() {
   const [shipping, setShipping] = useState({ ...initialState.shippingAddress })
   const [billing, setBilling] = useState({ ...initialState.billingAddress })
   const [duplicateAddress, setDuplicateAddress] = useState(true)
+  const [name, setName] = useState('John')
+  const [lastName, setLastName] = useState('Down')
+  const [dateOfBirth, setDateOfBirth] = useState('2010-08-20')
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [PersonalErrors, setPersonalErrors] = useState(false)
+  const [billingErrors, setBillingErrors] = useState(false)
+  const [shippingErrors, setShippingErrors] = useState(false)
   const actions = new HandleAuthActions(dispatch)
 
   useEffect(() => {
@@ -26,14 +33,25 @@ function SignUp() {
   const navigate = useNavigate()
 
   async function handleRegSubmit() {
-    if (state.emailErrors.length || state.passwordErrors.length) return
+    if (
+      state.emailErrors.length ||
+      state.passwordErrors.length ||
+      PersonalErrors ||
+      billingErrors ||
+      shippingErrors
+    )
+      return
     try {
       const customer = await createCustomer(
         state.email,
         state.password,
+        name,
+        lastName,
+        dateOfBirth,
         state.billingAddress,
         duplicateAddress ? state.billingAddress : state.shippingAddress
       )
+      console.log(state.lastName, state.firstName, state.dateOfBirth)
       console.log('Created customer\n', customer)
       const customerId = await loginCustomer(state.email, state.password)
       const customerInfo = { ...(await getCustomerToken(state.email, state.password)) }
@@ -72,6 +90,7 @@ function SignUp() {
         value={state.email}
         placeholder="Электронная почта"
         onChange={(event) => {
+          actions.setSubmitError('')
           actions.handleEmail(event)
         }}
       ></input>
@@ -85,6 +104,7 @@ function SignUp() {
           placeholder="Пароль"
           value={state.password}
           onChange={(event) => {
+            actions.setSubmitError('')
             actions.handlePassword(event, state.passwordSubmit)
           }}
         ></input>
@@ -114,11 +134,24 @@ function SignUp() {
         <ErrorMessage {...{ errorSource: 'Ошибка регистрации', errors: [state.submitError] }} />
       )}
 
+      <Personal
+        {...{
+          name: name,
+          setName: setName,
+          lastName: lastName,
+          setLastName: setLastName,
+          dateOfBirth: dateOfBirth,
+          setDateOfBirth: setDateOfBirth,
+          setComponentErrors: setPersonalErrors,
+        }}
+      />
+
       <Address
         {...{
           addressType: 'для выставления счета',
           address: billing,
           setAddress: setBilling,
+          setComponentErrors: setBillingErrors,
         }}
       />
       <label className="address-label" style={{ margin: '1.25rem auto' }}>
@@ -137,6 +170,7 @@ function SignUp() {
             addressType: 'доставки',
             address: shipping,
             setAddress: setShipping,
+            setComponentErrors: setShippingErrors,
           }}
         />
       )}

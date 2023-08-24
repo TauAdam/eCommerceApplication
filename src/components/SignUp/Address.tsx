@@ -1,67 +1,61 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AddressProp } from '../share/types'
 import ErrorMessage from '../share/errorMessage'
 import '../share/login.css'
 import { getInputStyle } from '../share/validation'
+import { validateAll } from './validateAddress'
 
 export default function Address(props: AddressProp) {
   const [def, setDef] = useState(false)
   const [errors, setErrors] = useState([] as string[])
-  const country = useRef(null)
-  const city = useRef(null)
-  const street = useRef(null)
-  const building = useRef(null)
-  const apartment = useRef(null)
+  const [country, setCountry] = useState('US')
+  const [city, setCity] = useState('New York')
+  const [street, setStreet] = useState('Washington')
+  const [building, setBuilding] = useState('1')
+  const [apartment, setApartment] = useState('100')
+  const [postalCode, setPostalCode] = useState('10000')
 
   useEffect(() => {
-    setAddress()
+    setAddress(postalCode, country, city, street, building, apartment)
   }, [def])
 
-  function checkInputError(value: string, type: string, errors: string[]): string[] {
-    const message = `Заполните поле "${type}"`
-    if (value.length === 0) {
-      return [...errors, message]
-    } else {
-      return errors
-    }
+  function setAddress(
+    postalCode: string,
+    country: string,
+    city: string,
+    street: string,
+    building: string,
+    apartment: string
+  ) {
+    props.setAddress({
+      country: country,
+      postalCode: postalCode,
+      city: city,
+      streetName: street,
+      building: building,
+      apartment: apartment,
+      asDefault: def,
+    })
   }
 
-  function getInputValue(input: HTMLInputElement | null): string {
-    if (input) return input.value
-    return ''
-  }
-
-  function validate() {
-    let errorsArray = []
-    const countryValue = getInputValue(country.current)
-    if (countryValue.length !== 2)
-      errorsArray.push('Страна указывается в формате ISO_3166-1_alpha-2, например RU, EN, KZ...')
-    errorsArray = checkInputError(getInputValue(city.current), 'Город', errorsArray)
-    errorsArray = checkInputError(getInputValue(street.current), 'Улица', errorsArray)
-    errorsArray = checkInputError(getInputValue(building.current), 'Здание', errorsArray)
-
+  function validate(
+    postalCode: string,
+    country: string,
+    city: string,
+    street: string,
+    building: string,
+    apartment: string
+  ) {
+    const errorsArray = validateAll(postalCode, country, city, street, building)
     setErrors(errorsArray)
-    if (errorsArray.length === 0) setAddress()
-  }
 
-  function setAddress() {
-    if (errors.length) return
-    if (
-      country.current &&
-      city.current &&
-      street.current &&
-      building.current &&
-      apartment.current
-    ) {
-      props.setAddress({
-        country: getInputValue(country.current),
-        city: getInputValue(city.current),
-        streetName: getInputValue(street.current),
-        building: getInputValue(building.current),
-        apartment: getInputValue(apartment.current),
-        asDefault: def,
-      })
+    if (errorsArray.length) {
+      props.setComponentErrors(true)
+      return
+    } else {
+      props.setComponentErrors(false)
+      setAddress(postalCode, country, city, street, building, apartment)
     }
   }
 
@@ -82,24 +76,49 @@ export default function Address(props: AddressProp) {
       <div className="address-container">
         <label className="input-label">
           <span>Страна (код)*</span>
+          <select
+            name="country"
+            className={getInputStyle(errors)}
+            placeholder="Страна (код)*"
+            onChange={(event) => {
+              setCountry(event.target.value)
+              validate(postalCode, event.target.value, city, street, building, apartment)
+              console.log(event.target.value)
+            }}
+          >
+            <option value="US" defaultChecked>
+              United States
+            </option>
+            <option value="RU">Russian Federation</option>
+            <option value="KZ">Kazakhstan</option>
+          </select>
+        </label>
+
+        <label className="input-label">
+          <span>Почтовый код*</span>
           <input
             type="text"
             className={getInputStyle(errors)}
-            ref={country}
-            defaultValue={props.address.country}
-            placeholder="Страна (код)*"
-            onChange={validate}
+            value={postalCode}
+            placeholder="Почтовый код"
+            onChange={(event) => {
+              setPostalCode(event.target.value)
+              validate(event.target.value, country, city, street, building, apartment)
+            }}
           />
         </label>
+
         <label className="input-label">
           <span>Город*</span>
           <input
             type="text"
             className={getInputStyle(errors)}
-            defaultValue={props.address.city}
-            ref={city}
+            value={city}
             placeholder="Город*"
-            onChange={validate}
+            onChange={(event) => {
+              setCity(event.target.value)
+              validate(postalCode, country, event.target.value, street, building, apartment)
+            }}
           />
         </label>
         <label className="input-label">
@@ -107,10 +126,12 @@ export default function Address(props: AddressProp) {
           <input
             type="text"
             className={getInputStyle(errors)}
-            defaultValue={props.address.streetName}
-            ref={street}
+            value={street}
             placeholder="Улица*"
-            onChange={validate}
+            onChange={(event) => {
+              setStreet(event.target.value)
+              validate(postalCode, country, city, event.target.value, building, apartment)
+            }}
           />
         </label>
         <label className="input-label">
@@ -118,10 +139,12 @@ export default function Address(props: AddressProp) {
           <input
             type="text"
             className={getInputStyle(errors)}
-            defaultValue={props.address.building}
-            ref={building}
+            value={building}
             placeholder="Здание*"
-            onChange={validate}
+            onChange={(event) => {
+              setBuilding(event.target.value)
+              validate(postalCode, country, city, street, event.target.value, apartment)
+            }}
           />
         </label>
         <label className="input-label">
@@ -129,9 +152,11 @@ export default function Address(props: AddressProp) {
           <input
             type="text"
             className="input"
-            ref={apartment}
-            defaultValue={props.address.apartment}
+            value={apartment}
             placeholder="Квартира"
+            onChange={(event) => {
+              setApartment(event.target.value)
+            }}
           />
         </label>
       </div>
