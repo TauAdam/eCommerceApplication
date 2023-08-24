@@ -1,3 +1,5 @@
+import { IAddress } from 'components/share/types'
+
 // const region = 'europe-west1'
 const projectKey = 'my-project98'
 const clientId = 'Zn03ugFjIoaOP5zfNAghuaMC'
@@ -69,4 +71,125 @@ export async function makeApiCall() {
   console.log(responseData)
 
   return responseData
+}
+
+async function getAccessToken() {
+  let accessToken = getCookie()
+
+  if (accessToken === null) {
+    await getToken()
+    accessToken = getCookie()
+  }
+
+  return accessToken
+}
+
+type NewCustomer = {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  dateOfBirth: string
+  addresses: IAddress[]
+  defaultShippingAddress?: number
+  defaultBillingAddress?: number
+}
+
+export async function createCustomer(
+  customerEmail: string,
+  customerPassword: string,
+  customerFirstName: string,
+  customerLastName: string,
+  customerDateOfBirth: string,
+  billing: IAddress,
+  shipping: IAddress
+) {
+  const accessToken = await getAccessToken()
+
+  const newCustomer: NewCustomer = {
+    email: customerEmail,
+    password: customerPassword,
+    firstName: customerFirstName,
+    lastName: customerLastName,
+    dateOfBirth: customerDateOfBirth,
+    addresses: [{ ...billing }, { ...shipping }],
+  }
+
+  if (billing.asDefault) newCustomer.defaultBillingAddress = 0
+  if (shipping.asDefault) newCustomer.defaultShippingAddress = 1
+
+  console.log('Fetch body:\n', newCustomer)
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/customers`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(newCustomer),
+    })
+
+    if (response.status === 400) {
+      throw new Error('Пользователь c такой почтой уже существует!')
+    }
+    if (!response.ok) {
+      throw new Error('Customer creation failed!')
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function loginCustomer(customerEmail: string, customerPassword: string = '') {
+  const accessToken = await getAccessToken()
+
+  try {
+    // https://docs.commercetools.com/api/projects/customers#authenticate-sign-in-customer
+    const response = await fetch(`${apiYrl}/${projectKey}/login`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`, //${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: customerEmail,
+        password: customerPassword,
+      }),
+    })
+
+    const authData = await response.json()
+    console.log('customer-id: ', authData.customer.id)
+    // localStorage.setItem('customer-id', authData.customer.id) // можем сохранить корректно авторизованного пользователя
+    return authData.customer.id || null
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Login Error:\n', error.message)
+    }
+    return null
+  }
+}
+
+export async function getCustomerToken(email: string, password: string) {
+  const myClientId = 'NRuZMmzXpEZWUH1MO6ChBpxM' // TODO: make global variables
+  const myClientSecret = 'HlHla0jmI9H8J9EMsOjF5Mzq4t78Q-Cg'
+  try {
+    const response = await fetch(`${authUrl}/oauth/${projectKey}/customers/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + btoa(`${myClientId}:${myClientSecret}`),
+      },
+      body: `grant_type=password&username=${email}&password=${password}`,
+    })
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
 }
