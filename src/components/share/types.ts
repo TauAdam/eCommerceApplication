@@ -68,13 +68,19 @@ interface IAuthState {
   billingAddress: IAddress
   shippingAddress: IAddress
 }
-
+interface IProduct {
+  name: string
+  image: string
+  description?: string
+  id: string
+}
 export {
-  ErrorProp,
-  AddressProp,
-  PersonalProp,
   AUTH_ACTION_TYPES,
-  authActionType,
-  IAuthState,
+  AddressProp,
+  ErrorProp,
   IAddress,
+  IAuthState,
+  IProduct,
+  PersonalProp,
+  authActionType,
 }
