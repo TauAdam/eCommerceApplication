@@ -1,5 +1,5 @@
 import React from 'react'
-import { showErrors } from './validation'
+import { showErrors } from './helpFunctions'
 import errorImage from '../../assets/images/error.png'
 import { ErrorProp } from './types'
 
