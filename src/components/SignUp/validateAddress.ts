@@ -13,8 +13,6 @@ export function getInputValue(input: HTMLInputElement | HTMLSelectElement | null
 }
 
 function validatePostal(postalCode: string, countryValue: string, errors: string[] = []) {
-  // console.log(postalCode, countryValue)
-
   const regRU_KZ = /^\d{6}$/
   const regUS = /(^\d{5}$|^\d{5}-\d{4}$)/
 
@@ -29,9 +27,11 @@ function validatePostal(postalCode: string, countryValue: string, errors: string
 }
 
 function validateCity(city: string, errors: string[] = []): string[] {
+  const regDigit = /\d/
   const regSpecSymbol =
     /(\!|\"|\#|\$|\%|\&|\'|\(|\)|\*|\+|\,|\-|\.|\/|\:|\;|\<|\=|\>|\?|\@|\[|\\|\]|\^|\_|\`|\{|\||\}|\~)/
-  if (city.match(regSpecSymbol) !== null) errors.push(`Город содержит специсимволы`)
+  if (city.match(regSpecSymbol) !== null) errors.push('Название города содержит специсимволы')
+  if (city.match(regDigit) !== null) errors.push('Название города содержит цифру')
   return errors
 }
 

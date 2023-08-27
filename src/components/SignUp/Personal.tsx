@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import ErrorMessage from '../share/errorMessage'
 import '../share/login.css'
-import { getInputStyle } from '../share/validation'
+import { getInputStyle } from '../share/helpFunctions'
 import { validateAll } from './validatePersonal'
 import { PersonalProp } from 'components/share/types'
 

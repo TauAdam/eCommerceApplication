@@ -5,7 +5,7 @@ export function validateName(name: string, nameType: string): string[] {
     /(\!|\"|\#|\$|\%|\&|\'|\(|\)|\*|\+|\,|\-|\.|\/|\:|\;|\<|\=|\>|\?|\@|\[|\\|\]|\^|\_|\`|\{|\||\}|\~)/
 
   if (name.match(regDigits) !== null) errors.push(`${nameType} содержит цифру`)
-  if (name.match(regSpecSymbol) !== null) errors.push(`${nameType} содержит специсимволы`)
+  if (name.match(regSpecSymbol) !== null) errors.push(`${nameType} содержит спецсимволы`)
   if (name.indexOf(' ') !== -1) errors.push(`${nameType} содержит пробел`)
 
   return errors

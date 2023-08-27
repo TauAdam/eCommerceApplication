@@ -1,19 +1,13 @@
-import show from '../../assets/images/password-show.png'
-import hide from '../../assets/images/password-hide.png'
-import React from 'react'
-
 function validateEmail(email: string) {
   const emErrors: string[] = []
-  const emailTemplate = /\w+@\w+(.com|.ru)/
-  const domainTemplate = /.+(.com|.ru)/
+  const emailTemplate = /^\w+@\w+\.[a-z]{2,3}$/
+  const domainTemplate = /.\.[a-z]{2,3}$/
   if (email.match(emailTemplate) === null) emErrors.push('должна быть формата "users@mail.com"')
   if (email.match(domainTemplate) === null)
     emErrors.push('должна содержать домен, например "...mail.com"')
   if (email.match('@') === null) emErrors.push('должна содержать разделитель"@"')
-  if (email[0] === ' ' || email[email.length - 1] === ' ')
-    emErrors.push('содержит пробелы в начале или конце строки')
+  if (email.indexOf(' ') !== -1) emErrors.push('содержит пробелы')
   return emErrors
-  //setEmailErrors(emErrors)
 }
 
 function validatePassword(password: string, secondPassword: string | undefined = undefined) {
@@ -38,49 +32,4 @@ function validatePassword(password: string, secondPassword: string | undefined =
   return passErrors
 }
 
-function showErrors(errors: string[]) {
-  return (
-    <ul>
-      {errors.map((el, index) => (
-        <li key={index}>{el}</li>
-      ))}
-    </ul>
-  )
-}
-
-function getInputStyle(errors: string[]) {
-  let hasErrors = false
-  for (let i = 0; i < errors.length; i++) {
-    if (errors[i]) hasErrors = true
-  }
-  if (hasErrors) {
-    return 'input input-error'
-  } else {
-    return 'input'
-  }
-}
-
-function getSourceImage(isShow: boolean) {
-  if (isShow) {
-    return show
-  } else {
-    return hide
-  }
-}
-
-function getPasswordType(isShow: boolean) {
-  if (isShow) {
-    return 'text'
-  } else {
-    return 'password'
-  }
-}
-
-export {
-  validateEmail,
-  validatePassword,
-  showErrors,
-  getSourceImage,
-  getPasswordType,
-  getInputStyle,
-}
+export { validateEmail, validatePassword }
