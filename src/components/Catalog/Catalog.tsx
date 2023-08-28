@@ -1,30 +1,39 @@
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { setProductsList } from '../../redux/slices/productsSlice'
+import { productsError, productsLoaded, productsRequested } from '../../redux/slices/productsSlice'
 import { parseFetchedData } from '../../utils/products'
 import { getProductsFromApi } from '../../utils/requests'
 import { ProductsGrid } from '../ProductsGrid'
 import s from './Catalog.module.css'
 
-async function getProducts() {
-  const fetchedProducts = await getProductsFromApi()
-  const products = parseFetchedData(fetchedProducts)
-  return products
-}
-
 export default function Catalog() {
-  const { productsList } = useAppSelector((state) => state.products)
-
+  const { productsList, loading, errorMessage } = useAppSelector((state) => state.products)
   const dispatch = useAppDispatch()
+
   useEffect(() => {
     async function fetchProductDetails() {
-      const productDetails = await getProducts()
-      dispatch(setProductsList(productDetails))
+      try {
+        dispatch(productsRequested())
+        const fetchedProducts = await getProductsFromApi()
+        const productDetails = parseFetchedData(fetchedProducts)
+        dispatch(productsLoaded(productDetails))
+      } catch (error) {
+        if (error instanceof Error) {
+          dispatch(productsError(error.message))
+          console.log(error)
+        }
+      }
     }
 
     fetchProductDetails()
   }, [dispatch])
 
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
+  if (errorMessage) {
+    return <span>{errorMessage}</span>
+  }
   return (
     <div className={s.catalog}>
       <ProductsGrid data={productsList} />

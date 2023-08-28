@@ -1,6 +1,6 @@
 import { Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk'
 
-export async function parseFetchedData(fetchedData: ProductPagedQueryResponse) {
+export function parseFetchedData(fetchedData: ProductPagedQueryResponse) {
   const products = fetchedData.results
   const essentialProductData = products.map((product: Product) => {
     const name = product.masterData.current.name['en-US']

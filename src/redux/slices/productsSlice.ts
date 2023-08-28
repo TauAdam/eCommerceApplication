@@ -3,19 +3,29 @@ import { IProduct } from '../../components/share/types'
 
 interface ProductsState {
   productsList: IProduct[]
+  loading: boolean
+  errorMessage: string
 }
 
-const initialState: ProductsState = { productsList: [] }
+const initialState: ProductsState = { productsList: [], loading: false, errorMessage: '' }
 
 const productsSlice = createSlice({
-  name: 'productsList',
+  name: 'products',
   initialState,
   reducers: {
-    setProductsList(state, action: PayloadAction<IProduct[]>) {
+    productsRequested(state) {
+      state.loading = true
+    },
+    productsLoaded(state, action: PayloadAction<IProduct[]>) {
       state.productsList = action.payload
+      state.loading = false
+    },
+    productsError(state, action: PayloadAction<string>) {
+      state.loading = false
+      state.errorMessage = action.payload
     },
   },
 })
-export const { setProductsList } = productsSlice.actions
+export const { productsLoaded, productsRequested, productsError } = productsSlice.actions
 
 export default productsSlice.reducer
