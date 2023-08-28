@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setProductsList } from '../../redux/slices/productsSlice'
+import { RootState } from '../../redux/store/store'
 import { parseFetchedData } from '../../utils/products'
 import { getProductsFromApi } from '../../utils/requests'
 import { ProductsGrid } from '../ProductsGrid'
-import { IProduct } from '../share/types'
 import s from './Catalog.module.css'
 
 async function getProducts() {
@@ -12,20 +14,21 @@ async function getProducts() {
 }
 
 export default function Catalog() {
-  const [products, setProducts] = useState<IProduct[]>([])
+  const { productsList } = useSelector((state: RootState) => state.products)
 
+  const dispatch = useDispatch()
   useEffect(() => {
     async function fetchProductDetails() {
       const productDetails = await getProducts()
-      setProducts(productDetails)
+      dispatch(setProductsList(productDetails))
     }
 
     fetchProductDetails()
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={s.catalog}>
-      <ProductsGrid data={products} />
+      <ProductsGrid data={productsList} />
     </div>
   )
 }
