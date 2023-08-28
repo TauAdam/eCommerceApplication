@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { authSlice } from 'redux/slices/authSlice'
+import auth from 'redux/slices/authSlice'
 import products from '../slices/productsSlice'
 
 const initialIsAuthenticated = localStorage.getItem('customer') !== null
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    auth: authSlice.reducer,
+    auth,
     products,
   },
   preloadedState: {
@@ -17,7 +17,4 @@ const store = configureStore({
 })
 
 export type RootState = ReturnType<typeof store.getState>
-
-export const { login, logout } = authSlice.actions
-
-export default store
+export type AppDispatch = typeof store.dispatch

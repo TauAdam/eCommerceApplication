@@ -5,7 +5,7 @@ interface ProductsState {
   productsList: IProduct[]
 }
 
-const initialState = { productsList: [] } as ProductsState
+const initialState: ProductsState = { productsList: [] }
 
 const productsSlice = createSlice({
   name: 'productsList',

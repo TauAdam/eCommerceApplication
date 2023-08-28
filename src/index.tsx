@@ -9,8 +9,8 @@ import './index.css'
 import ErrorPage from './pages/Error/ErrorPage'
 import Registration from 'pages/Registration/Registration'
 import Enter from 'pages/Enter/Enter'
-import store from 'redux/store/store'
 import { Product } from './pages/Product/Product'
+import { store } from './redux/store/store'
 
 const router = createBrowserRouter([
   {

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { setProductsList } from '../../redux/slices/productsSlice'
-import { RootState } from '../../redux/store/store'
 import { parseFetchedData } from '../../utils/products'
 import { getProductsFromApi } from '../../utils/requests'
 import { ProductsGrid } from '../ProductsGrid'
@@ -14,9 +13,9 @@ async function getProducts() {
 }
 
 export default function Catalog() {
-  const { productsList } = useSelector((state: RootState) => state.products)
+  const { productsList } = useAppSelector((state) => state.products)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   useEffect(() => {
     async function fetchProductDetails() {
       const productDetails = await getProducts()
