@@ -1,3 +1,4 @@
+import { ProductPagedQueryResponse } from '@commercetools/platform-sdk'
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { productsError, productsLoaded, productsRequested } from '../../redux/slices/productsSlice'
@@ -9,12 +10,11 @@ import s from './Catalog.module.css'
 export default function Catalog() {
   const { productsList, loading, errorMessage } = useAppSelector((state) => state.products)
   const dispatch = useAppDispatch()
-
   useEffect(() => {
     async function fetchProductDetails() {
       try {
         dispatch(productsRequested())
-        const fetchedProducts = await getProductsFromApi()
+        const fetchedProducts: ProductPagedQueryResponse = await getProductsFromApi()
         const productDetails = parseFetchedData(fetchedProducts)
         dispatch(productsLoaded(productDetails))
       } catch (error) {
