@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import { AddressProp } from '../share/types'
 import ErrorMessage from '../share/errorMessage'
-import '../share/login.css'
 import { getInputStyle } from '../share/helpFunctions'
 import { validateAll } from './validateAddress'
 

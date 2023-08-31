@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useReducer, ChangeEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../share/login.css'
 import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/helpFunctions'
 import { createCustomer, getCustomerToken, loginCustomer } from 'utils/requests'
 import ErrorMessage from 'components/share/errorMessage'

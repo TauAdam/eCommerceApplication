@@ -45,13 +45,14 @@ type authActionType = {
 }
 
 interface IAddress {
+  id?: string
   country: string
   postalCode: string
   city: string
   streetName: string
   building: string
   apartment?: string
-  asDefault: boolean
+  asDefault?: boolean
 }
 
 interface IAuthState {
@@ -69,6 +70,8 @@ interface IAuthState {
   shippingAddress: IAddress
 }
 
+type ChangeType = Record<string, string | IAddress>
+
 export {
   ErrorProp,
   AddressProp,
@@ -77,4 +80,5 @@ export {
   authActionType,
   IAuthState,
   IAddress,
+  ChangeType,
 }

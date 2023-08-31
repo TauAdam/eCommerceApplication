@@ -68,6 +68,11 @@ const Header = () => {
             <Link to="/signup">Sign up</Link>
           </li>
           {isAuthenticated && (
+            <li className={`nav__item ${location.pathname === '/profile' ? 'active' : ''}`}>
+              <Link to="/profile">My profile</Link>
+            </li>
+          )}
+          {isAuthenticated && (
             <li className={`nav__item ${location.pathname === '/exit' ? 'active' : ''}`}>
               <Link to="/" onClick={handleExitClick}>
                 Exit

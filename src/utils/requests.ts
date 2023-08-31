@@ -1,4 +1,5 @@
-import { IAddress } from 'components/share/types'
+import { ChangeType, IAddress } from 'components/share/types'
+import { ICustomer } from 'components/ProfileInfo/ProfileTypes'
 
 // const region = 'europe-west1'
 const projectKey = 'my-project98'
@@ -184,6 +185,98 @@ export async function getCustomerToken(email: string, password: string) {
       },
       body: `grant_type=password&username=${email}&password=${password}`,
     })
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
+export async function getCustomer(id: string) {
+  const accessToken = await getAccessToken()
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/customers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Get customer request failed with status code ${response.status}`)
+    }
+
+    const data = (await response.json()) as ICustomer
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
+export async function updateCustomer(
+  id: string,
+  version: number,
+  actions: ChangeType[]
+): Promise<ICustomer | undefined> {
+  const accessToken = await getAccessToken()
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/customers/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        version,
+        actions,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`update failed with status code ${response.status}`)
+    }
+
+    const data = (await response.json()) as ICustomer
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
+export async function changePassword(
+  id: string,
+  version: number,
+  currentPassword: string,
+  newPassword: string
+) {
+  const accessToken = await getAccessToken()
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/customers/password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        id,
+        version,
+        currentPassword,
+        newPassword,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`password change failed with status code ${response.status}`)
+    }
 
     const data = await response.json()
     return data

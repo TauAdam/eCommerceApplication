@@ -11,7 +11,7 @@ export function validateName(name: string, nameType: string): string[] {
   return errors
 }
 
-function validateBirth(birthDate: string) {
+export function validateBirth(birthDate: string) {
   const error: string[] = []
   const [birthYear, birthMonth, birthDay] = birthDate.split('-').map((x: string) => Number(x))
   const date = new Date()

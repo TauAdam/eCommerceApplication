@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../share/login.css'
 import { validateEmail, validatePassword } from 'components/share/validation'
 import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/helpFunctions'
 import { getCustomerToken, loginCustomer } from 'utils/requests'
