@@ -36,7 +36,9 @@ const Header = () => {
   return (
     <div className="background">
       <div className="wrapper">
-        <img src={logo} alt="Logo" />
+        <Link to="/">
+          <img src={logo} alt="Logo" />
+        </Link>
         <div className={`burger__icon ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
           <span></span>
           <span></span>
@@ -56,8 +58,8 @@ const Header = () => {
           />
         </svg>
         <ul className={`nav__list ${isMenuOpen ? 'open' : ''}`}>
-          <li className={`nav__item ${location.pathname === '/' ? 'active' : ''}`}>
-            <Link to="/">Catalog Product</Link>
+          <li className={`nav__item ${location.pathname === '/catalog' ? 'active' : ''}`}>
+            <Link to="/catalog">Catalog Product</Link>
           </li>
           <li className={`nav__item ${location.pathname === '/product' ? 'active' : ''}`}>
             <Link to="/product">Detailed Product</Link>

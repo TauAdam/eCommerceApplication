@@ -7,7 +7,7 @@ import { getProductsFromApi } from '../../utils/requests'
 import { ProductsGrid } from '../ProductsGrid'
 import s from './Catalog.module.css'
 
-export default function Catalog() {
+export function Catalog() {
   const { productsList, loading, errorMessage } = useAppSelector((state) => state.products)
   const dispatch = useAppDispatch()
   useEffect(() => {

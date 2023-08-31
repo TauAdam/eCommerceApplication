@@ -3,11 +3,11 @@ import { Card } from '../Card'
 import { IProduct } from '../share/types'
 import s from './ProductGrid.module.css'
 
-interface ProductsGridProps {
+interface Props {
   data: IProduct[]
 }
 
-export function ProductsGrid({ data }: ProductsGridProps) {
+export function ProductsGrid({ data }: Props) {
   return (
     <div className={s.productGrid}>
       {data.map((el) => (
