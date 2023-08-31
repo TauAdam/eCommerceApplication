@@ -8,6 +8,7 @@ import { showDate, showInfo } from './helpFunctions'
 import { changePassword, updateCustomer } from 'utils/requests'
 
 import editImg from '../../assets/images/edit.png'
+import { validatePassword } from 'components/share/validation'
 
 type PropType = {
   customerInfo: ICustomer
@@ -22,6 +23,8 @@ export default function Personal(props: PropType) {
   const [firstNameErrors, setFirstNameErrors] = useState([] as string[])
   const [lastNameErrors, setLastNameErrors] = useState([] as string[])
   const [dateOfBirthErrors, setDateOfBirthErrors] = useState([] as string[])
+  const [currentPasswordErrors, setCurrentPasswordErrors] = useState([] as string[])
+  const [newPasswordErrors, setNewPasswordErrors] = useState([] as string[])
 
   return (
     <>
@@ -95,9 +98,16 @@ export default function Personal(props: PropType) {
         <button
           className="profile__button"
           onClick={async () => {
-            console.log(
-              await updateCustomer(props.customerInfo.id, props.customerInfo.version ?? 1, changes)
+            if (
+              !editMode ||
+              emailErrors.length ||
+              firstNameErrors.length ||
+              lastNameErrors.length ||
+              dateOfBirthErrors.length
             )
+              return
+            updateCustomer(props.customerInfo.id, props.customerInfo.version ?? 1, changes)
+            setEditMode(false)
           }}
         >
           Сохранить изменения
@@ -112,30 +122,55 @@ export default function Personal(props: PropType) {
               type="text"
               placeholder="Введите ваш пароль"
               id="current-password"
+              onChange={(event) => {
+                console.log(event.target.value)
+                const errors = validatePassword(event.target.value)
+                console.log(errors)
+                setCurrentPasswordErrors(errors)
+              }}
             />
+            {currentPasswordErrors.length > 0 && (
+              <ErrorMessage
+                {...{
+                  errorSource: 'Ошибка ввода текущего пароля',
+                  errors: currentPasswordErrors,
+                }}
+              />
+            )}
             <input
               className="field"
               type="text"
               placeholder="Введите новый пароль"
               id="new-password"
+              onChange={(event) => {
+                const errors = validatePassword(event.target.value)
+                setNewPasswordErrors(errors)
+              }}
             />
+            {newPasswordErrors.length > 0 && (
+              <ErrorMessage
+                {...{
+                  errorSource: 'Ошибка ввода нового пароля',
+                  errors: newPasswordErrors,
+                }}
+              />
+            )}
             <span
               className="password__button"
               onClick={async () => {
+                if (currentPasswordErrors.length || newPasswordErrors.length) return
                 const currPassRlement = document.getElementById(
                   'current-password'
                 ) as HTMLInputElement
                 const newPassElement = document.getElementById('new-password') as HTMLInputElement
                 const currentPassword = currPassRlement.value
                 const newPassword = newPassElement.value
-                console.log(currentPassword, '\n', newPassword)
-                console.log(
-                  await changePassword(
-                    props.customerInfo.id,
-                    props.customerInfo.version || 1,
-                    currentPassword,
-                    newPassword
-                  )
+
+                changePassword(
+                  props.customerInfo.id,
+                  props.customerInfo.version || 1,
+                  currentPassword,
+                  newPassword
                 )
                 setToChangePassword(!toChangePassword)
               }}
