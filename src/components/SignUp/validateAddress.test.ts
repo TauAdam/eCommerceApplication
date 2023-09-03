@@ -1,4 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
+import { ErrorMessages } from 'components/share/types'
 import { validateAll } from './validateAddress'
 
 describe('validate address inputs:', () => {
@@ -6,19 +7,15 @@ describe('validate address inputs:', () => {
     expect(validateAll('101101', 'RU', 'Moscow', 'Orlova', '1')).toEqual([])
   })
   test('Проверка на некорректный почтовый код для RU и KZ региона', () => {
-    expect(validateAll('10110', 'RU', 'Moscow', 'Orlova', '1')).toEqual([
-      'Почтовый код страны должен быть формата NNNNNN',
-    ])
+    expect(validateAll('10110', 'RU', 'Moscow', 'Orlova', '1')).toEqual([ErrorMessages.postalRU])
   })
   test('Проверка на некорректный почтовый код для US региона', () => {
-    expect(validateAll('1011054', 'US', 'Moscow', 'Orlova', '1')).toEqual([
-      'Почтовый код страны должен быть формата NNNNN или NNNNN-NNNN',
-    ])
+    expect(validateAll('1011054', 'US', 'Moscow', 'Orlova', '1')).toEqual([ErrorMessages.postalUS])
   })
   test('Проверка на специальный символ или цифру в названии города', () => {
     expect(validateAll('101101', 'RU', 'Mo1scow!', 'Orlova', '1')).toEqual([
-      'Название города содержит специсимволы',
-      'Название города содержит цифру',
+      `Название города ${ErrorMessages.hasSymbol}`,
+      `Название города ${ErrorMessages.hasDigit}`,
     ])
   })
   test('Проверка на пустые значения', () => {

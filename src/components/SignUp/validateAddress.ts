@@ -1,3 +1,6 @@
+import { ErrorMessages } from 'components/share/types'
+import { regSpecSymbol } from 'components/share/validation'
+
 function checkInputError(value: string, type: string, errors: string[]): string[] {
   const message = `Заполните поле "${type}"`
   if (value.length === 0) {
@@ -17,21 +20,17 @@ function validatePostal(postalCode: string, countryValue: string, errors: string
   const regUS = /(^\d{5}$|^\d{5}-\d{4}$)/
 
   if (countryValue === 'RU' || countryValue === 'KZ') {
-    if (postalCode.match(regRU_KZ) === null)
-      errors.push('Почтовый код страны должен быть формата NNNNNN')
+    if (postalCode.match(regRU_KZ) === null) errors.push(ErrorMessages.postalRU)
   } else if (countryValue === 'US') {
-    if (postalCode.match(regUS) === null)
-      errors.push('Почтовый код страны должен быть формата NNNNN или NNNNN-NNNN')
+    if (postalCode.match(regUS) === null) errors.push(ErrorMessages.postalUS)
   }
   return errors
 }
 
 function validateCity(city: string, errors: string[] = []): string[] {
   const regDigit = /\d/
-  const regSpecSymbol =
-    /(\!|\"|\#|\$|\%|\&|\'|\(|\)|\*|\+|\,|\-|\.|\/|\:|\;|\<|\=|\>|\?|\@|\[|\\|\]|\^|\_|\`|\{|\||\}|\~)/
-  if (city.match(regSpecSymbol) !== null) errors.push('Название города содержит специсимволы')
-  if (city.match(regDigit) !== null) errors.push('Название города содержит цифру')
+  if (city.match(regSpecSymbol) !== null) errors.push(`Название города ${ErrorMessages.hasSymbol}`)
+  if (city.match(regDigit) !== null) errors.push(`Название города ${ErrorMessages.hasDigit}`)
   return errors
 }
 
