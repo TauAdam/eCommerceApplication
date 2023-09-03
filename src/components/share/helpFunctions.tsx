@@ -1,6 +1,6 @@
+import React from 'react'
 import show from '../../assets/images/password-show.png'
 import hide from '../../assets/images/password-hide.png'
-import React from 'react'
 
 function showErrors(errors: string[]) {
   return (
@@ -17,27 +17,10 @@ function getInputStyle(errors: string[]) {
   for (let i = 0; i < errors.length; i++) {
     if (errors[i]) hasErrors = true
   }
-  if (hasErrors) {
-    return 'input input-error'
-  } else {
-    return 'input'
-  }
+  return hasErrors ? 'input input-error' : 'input'
 }
 
-function getSourceImage(isShow: boolean) {
-  if (isShow) {
-    return show
-  } else {
-    return hide
-  }
-}
-
-function getPasswordType(isShow: boolean) {
-  if (isShow) {
-    return 'text'
-  } else {
-    return 'password'
-  }
-}
+const getSourceImage = (isShow: boolean) => (isShow ? show : hide)
+const getPasswordType = (isShow: boolean) => (isShow ? 'text' : 'password')
 
 export { showErrors, getSourceImage, getPasswordType, getInputStyle }
