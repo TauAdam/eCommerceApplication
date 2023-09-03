@@ -30,6 +30,8 @@ export const handleChekbox = (event: React.ChangeEvent<HTMLInputElement>, isEdit
   }
 }
 
+const hasErrors = (errorsLength: number) => (errorsLength ? 'field field-error' : 'field')
+
 export function showInfo(
   key: string,
   value: string = 'не указано',
@@ -38,15 +40,17 @@ export function showInfo(
   editMode: boolean,
   changes: ChangeType[],
   setChangesCallback: (arg: ChangeType[]) => void,
-  errorCallback: (arg: string[]) => void
+  errorCallback: (arg: string[]) => void,
+  errorsLength: number = 0
 ) {
   return (
     <div className="field-wrapper">
       <span>{key}:</span>
       {editMode && (
         <input
-          className="field"
+          className={hasErrors(errorsLength)}
           type="text"
+          placeholder={key}
           data-type={key}
           defaultValue={value}
           onChange={(event) => {
@@ -205,13 +209,7 @@ export function showCountry(
   )
 }
 
-export function handleAddressText(isAdd: boolean) {
-  return isAdd ? 'отменить' : 'добавить адрес'
-}
-
-export function handleSubmitAddress(root: HTMLDivElement) {
-  console.log(root)
-}
+export const handleAddressText = (isAdd: boolean) => (isAdd ? 'отменить' : 'добавить адрес')
 
 export async function removeAddress(
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

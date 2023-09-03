@@ -4,7 +4,7 @@ import { hasSpaces, regSpecSymbol } from 'components/share/validation'
 export function validateName(name: string, nameType: string): string[] {
   const errors: string[] = []
   const regDigits = /\d+/
-
+  if (name === '') errors.push(`Заполните поле "${nameType}"`)
   if (name.match(regDigits) !== null) errors.push(`${nameType} ${ErrorMessages.hasDigit}`)
   if (name.match(regSpecSymbol) !== null) errors.push(`${nameType} ${ErrorMessages.hasSymbol}`)
   if (hasSpaces(name)) errors.push(`${nameType} ${ErrorMessages.hasSpaces}`)

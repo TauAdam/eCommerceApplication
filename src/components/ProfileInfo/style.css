@@ -66,9 +66,18 @@
   width: 350px;
   border-radius: 15px;
   background-color: #d6d6d6;
+  border: 1px solid #d6d6d6;
   font-size: 1rem;
   color: #101010;
   flex-shrink: 0;
+}
+
+.field::placeholder {
+  opacity: 0.5;
+}
+
+.field-error {
+  border: 1px solid red;
 }
 
 .password-wrapper * {

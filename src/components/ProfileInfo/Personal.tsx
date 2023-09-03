@@ -54,7 +54,8 @@ export default function Personal(props: PropType) {
           editMode,
           changes,
           setChanges,
-          setEmailErrors
+          setEmailErrors,
+          emailErrors.length
         )}
         {emailErrors.length > 0 && editMode && (
           <ErrorMessage {...{ errorSource: 'Ошибка ввода почты', errors: emailErrors }} />
@@ -67,7 +68,8 @@ export default function Personal(props: PropType) {
           editMode,
           changes,
           setChanges,
-          setFirstNameErrors
+          setFirstNameErrors,
+          firstNameErrors.length
         )}
         {firstNameErrors.length > 0 && editMode && (
           <ErrorMessage {...{ errorSource: 'Ошибка в поле "Имя"', errors: firstNameErrors }} />
@@ -80,7 +82,8 @@ export default function Personal(props: PropType) {
           editMode,
           changes,
           setChanges,
-          setLastNameErrors
+          setLastNameErrors,
+          lastNameErrors.length
         )}
         {lastNameErrors.length > 0 && editMode && (
           <ErrorMessage {...{ errorSource: 'Ошибка в поле "Фамилия"', errors: lastNameErrors }} />
