@@ -36,11 +36,6 @@ const Header = () => {
     <div className="background">
       <div className="wrapper">
         <img src={logo} alt="Logo" />
-        <div className={`burger__icon ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -54,6 +49,11 @@ const Header = () => {
             fill="#838383"
           />
         </svg>
+        <div className={`burger__icon ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <ul className={`nav__list ${isMenuOpen ? 'open' : ''}`}>
           <li className={`nav__item ${location.pathname === '/' ? 'active' : ''}`}>
             <Link to="/">Catalog Product</Link>
