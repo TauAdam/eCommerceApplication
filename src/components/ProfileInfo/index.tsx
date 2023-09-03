@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react'
 
+import { getCustomer } from 'utils/requests'
+
+import { initialProfileState } from './ProfileTypes'
+import { handleAddressText } from './helpFunctions'
+
+import Personal from './Personal'
 import AddressInfo from './AddressInfo'
 import AddressAdd from './AddressAdd'
 
-import { getCustomer } from 'utils/requests'
-import { handleAddressText } from './helpFunctions'
-import { initialProfileState } from './ProfileTypes'
-
 import './style.css'
-import Personal from './Personal'
 
 export default function ProfileInfo() {
   const [customerInfo, setCustomerInfo] = useState(initialProfileState)

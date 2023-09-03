@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { addAddress, showAddressInfo, showCountry } from './helpFunctions'
 import { ICustomer } from './ProfileTypes'
+import { addAddress, showAddressInfo, showCountry } from './helpFunctions'
+
 import ErrorMessage from 'components/share/errorMessage'
 
 type PropType = {

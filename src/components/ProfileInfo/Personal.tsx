@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import ErrorMessage from 'components/share/errorMessage'
+
+import { changePassword, updateCustomer } from 'utils/requests'
 
 import { CustomerActionValues, CustomerActions, ICustomer } from './ProfileTypes'
 import { ChangeType } from 'components/share/types'
 
 import { showDate, showInfo } from './helpFunctions'
-import { changePassword, updateCustomer } from 'utils/requests'
+import { validatePassword } from 'components/share/validation'
 
 import editImg from '../../assets/images/edit.png'
-import { validatePassword } from 'components/share/validation'
+
+import ErrorMessage from 'components/share/errorMessage'
 
 type PropType = {
   customerInfo: ICustomer

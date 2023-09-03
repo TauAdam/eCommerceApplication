@@ -1,6 +1,6 @@
 import Footer from 'components/Footer/Footer'
 import Header from 'components/Header/Header'
-import SignUp from 'components/SignUp/SignUp'
+import SignUp from 'components/SignUp'
 import './Registration.css'
 
 import React from 'react'
