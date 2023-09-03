@@ -1,17 +1,18 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import App from './App'
 
-import './index.css'
-import ErrorPage from './pages/Error/ErrorPage'
-import Registration from 'pages/Registration/Registration'
 import Enter from 'pages/Enter/Enter'
-import store from 'redux/store/store'
+import Registration from 'pages/Registration/Registration'
+import './index.css'
+import { CatalogPage } from './pages/CatalogPage'
+import ErrorPage from './pages/Error/ErrorPage'
 import { Product } from './pages/Product/Product'
 import Profile from './pages/Profile/Profile'
+import { store } from './redux/store/store'
 
 const router = createBrowserRouter([
   {
@@ -35,8 +36,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+  {
     path: '/profile',
     element: <Profile />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/catalog',
+    element: <CatalogPage />,
     errorElement: <ErrorPage />,
   },
 ])

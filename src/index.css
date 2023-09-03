@@ -107,6 +107,8 @@ form[action$='destroy'] button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .nav__item a {
