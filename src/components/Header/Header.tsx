@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import { RootState, login, logout } from 'redux/store/store'
 
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { login, logout } from '../../redux/slices/authSlice'
 import './Header.css'
 import logo from './logo.png'
 
 const Header = () => {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
+  const { isAuthenticated } = useAppSelector((state) => state.auth)
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const customer = localStorage.getItem('customer')
 
@@ -35,7 +36,9 @@ const Header = () => {
   return (
     <div className="background">
       <div className="wrapper">
-        <img src={logo} alt="Logo" />
+        <Link to="/">
+          <img src={logo} alt="Logo" />
+        </Link>
         <div className={`burger__icon ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
           <span></span>
           <span></span>
@@ -55,8 +58,8 @@ const Header = () => {
           />
         </svg>
         <ul className={`nav__list ${isMenuOpen ? 'open' : ''}`}>
-          <li className={`nav__item ${location.pathname === '/' ? 'active' : ''}`}>
-            <Link to="/">Catalog Product</Link>
+          <li className={`nav__item ${location.pathname === '/catalog' ? 'active' : ''}`}>
+            <Link to="/catalog">Catalog Product</Link>
           </li>
           <li className={`nav__item ${location.pathname === '/product' ? 'active' : ''}`}>
             <Link to="/product">Detailed Product</Link>

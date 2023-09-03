@@ -51,7 +51,7 @@ export function getCookie() {
   return null
 }
 
-export async function makeApiCall() {
+export async function getProductsFromApi() {
   const apiUrl = `${apiYrl}/${projectKey}/products`
 
   const accessToken = getCookie()
@@ -68,8 +68,6 @@ export async function makeApiCall() {
   }
 
   const responseData = await response.json()
-  console.log(responseData)
-
   return responseData
 }
 
