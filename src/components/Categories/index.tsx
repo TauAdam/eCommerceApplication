@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 
-import { getProductsFromCategory } from 'utils/requests'
 import { Category, categories } from 'components/share/categories'
+import { getProductsFromCategory } from 'utils/requests'
+import { useAppDispatch } from '../../hooks'
+import { productsError, productsLoaded, productsRequested } from '../../redux/slices/productsSlice'
+import { parseFetchedData } from '../../utils/products'
 import './style.css'
 
 export default function Categories() {
   const [chain, setChain] = useState([] as string[])
   const [open, setOpen] = useState(false)
+  const dispatch = useAppDispatch()
 
   const showOrHide = (isOpen: boolean) => (isOpen ? 'скрыть' : 'показать')
   const hasChild = (length: number) => (length === 0 ? 'category-child' : '')
@@ -25,8 +29,19 @@ export default function Categories() {
           key={element.id}
           onClick={async (event) => {
             event.stopPropagation()
-            const products = await getProductsFromCategory(element.id)
-            console.log(products)
+            try {
+              dispatch(productsRequested())
+
+              const products = await getProductsFromCategory(element.id)
+              const productDetails = parseFetchedData(products)
+
+              dispatch(productsLoaded(productDetails))
+            } catch (error) {
+              if (error instanceof Error) {
+                dispatch(productsError(error.message))
+              }
+            }
+
             const chain = updateCategoryChain(event, element.id)
             setChain(chain)
           }}
