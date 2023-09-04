@@ -1,5 +1,6 @@
-import { ChangeType, IAddress, Products } from 'components/share/types'
+import { ProductPagedQueryResponse } from '@commercetools/platform-sdk'
 import { ICustomer } from 'components/ProfileInfo/ProfileTypes'
+import { ChangeType, IAddress } from 'components/share/types'
 
 // const region = 'europe-west1'
 const projectKey = 'my-project98'
@@ -68,11 +69,8 @@ export async function getProductsFromApi() {
     throw new Error('API Call Failed')
   }
 
-  const responseData = await response.json()
-  for (const key in responseData) {
-    console.log(responseData[key])
-  }
-  return responseData
+  const responseData: ProductPagedQueryResponse = await response.json()
+  return responseData.results
 }
 
 async function getAccessToken() {
@@ -348,10 +346,10 @@ export async function getProductsFromCategory(categoryId: string) {
   })
 
   if (!response.ok) {
-    throw new Error('API Call Failed')
+    throw new Error('Categories Call Failed')
   }
 
-  const responseData = (await response.json()) as Products
+  const responseData: ProductPagedQueryResponse = await response.json()
   const products = responseData.results.filter((el) => {
     const categories = el.masterData.current.categories
     return categories.some((category) => category.id === categoryId)
