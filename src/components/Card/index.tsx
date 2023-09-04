@@ -30,9 +30,11 @@ export function Card({ item }: Props) {
   }
   return (
     <div className={s.card}>
-      <img className={s.cardImage} src={item.image} alt={item.name} />
+      <div className={s.imgContainer}>
+        <img className={s.cardImage} src={item.image} alt={item.name} />
+      </div>
       <div className={s.cardContent}>
-        <h3 className={s.cardTitle}>{item.name}</h3>
+        <div className={s.cardTitle}>{item.name}</div>
         {discountedPrice && originalPrice ? (
           <div className={s.cardPrice}>
             <span className={s.priceDiscounted}>{discountedPrice}</span>

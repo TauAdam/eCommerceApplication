@@ -24,6 +24,7 @@ body {
   margin: 0;
   line-height: 1.5;
   color: #121212;
+  background: #eaeaea;
 }
 textarea,
 input,
@@ -107,7 +108,7 @@ form[action$='destroy'] button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1440px;
+  max-width: 1110px;
   margin: 0 auto;
 }
 
