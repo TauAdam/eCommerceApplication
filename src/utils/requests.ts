@@ -1,4 +1,4 @@
-import { ChangeType, IAddress } from 'components/share/types'
+import { ChangeType, IAddress, Products } from 'components/share/types'
 import { ICustomer } from 'components/ProfileInfo/ProfileTypes'
 
 // const region = 'europe-west1'
@@ -69,6 +69,9 @@ export async function getProductsFromApi() {
   }
 
   const responseData = await response.json()
+  for (const key in responseData) {
+    console.log(responseData[key])
+  }
   return responseData
 }
 
@@ -284,3 +287,97 @@ export async function changePassword(
     }
   }
 }
+
+export async function getCategories() {
+  const accessToken = await getAccessToken()
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/categories/`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    const data = await response.json()
+    console.log('Категории:\n', data)
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
+export async function updateProduct(id: string, actions: ChangeType[], version: number) {
+  const accessToken = await getAccessToken()
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/products/${id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        version,
+        actions,
+      }),
+    })
+
+    const data = await response.json()
+    console.log('Обновлено:\n', data)
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
+export async function getProductsFromCategory(categoryId: string) {
+  const apiUrl = `${apiYrl}/${projectKey}/products`
+
+  const accessToken = getCookie()
+
+  const response = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error('API Call Failed')
+  }
+
+  const responseData = (await response.json()) as Products
+  const products = responseData.results.filter((el) => {
+    const categories = el.masterData.current.categories
+    return categories.some((category) => category.id === categoryId)
+  })
+  return products
+}
+
+// export async function getProductsFromCategory(id: string) {
+//   const apiUrl = `${apiYrl}/${projectKey}/product-projections/search?filter=categories.id:${id}`
+
+//   const accessToken = getCookie()
+
+//   const response = await fetch(apiUrl, {
+//     method: 'GET',
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//   })
+
+//   if (!response.ok) {
+//     throw new Error('API Call Failed')
+//   }
+
+//   const responseData = await response.json()
+//   for (const key in responseData) {
+//     console.log(responseData[key])
+//   }
+//   return responseData
+// }

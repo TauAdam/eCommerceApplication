@@ -5,6 +5,7 @@ import { productsError, productsLoaded, productsRequested } from '../../redux/sl
 import { parseFetchedData } from '../../utils/products'
 import { getProductsFromApi } from '../../utils/requests'
 import { ProductsGrid } from '../ProductsGrid'
+import Categories from '../Categories'
 import s from './Catalog.module.css'
 
 export function Catalog() {
@@ -36,6 +37,7 @@ export function Catalog() {
   }
   return (
     <div className={s.catalog}>
+      <Categories />
       <ProductsGrid data={productsList} />
     </div>
   )
