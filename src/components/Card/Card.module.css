@@ -63,6 +63,7 @@
   font-weight: 600;
   line-height: normal;
   text-decoration: line-through;
+  text-decoration-color: #df6464;
 }
 .priceSimple {
   color: #ffa542;
