@@ -47,13 +47,14 @@ type authActionType = {
 }
 
 interface IAddress {
+  id?: string
   country: string
   postalCode: string
   city: string
   streetName: string
   building: string
   apartment?: string
-  asDefault: boolean
+  asDefault?: boolean
 }
 
 interface IAuthState {
@@ -70,6 +71,27 @@ interface IAuthState {
   billingAddress: IAddress
   shippingAddress: IAddress
 }
+
+type ChangeType = Record<string, string | IAddress>
+
+enum ErrorMessages {
+  hasDigit = 'содержит цифру',
+  hasSymbol = 'содержит спецсимволы',
+  birthDate = 'покупатель должен быть не младше 13 лет',
+  emailFormat = 'должна быть формата "users@mail.com"',
+  emailDomain = 'должна содержать домен, например "...mail.com"',
+  emailDelimiter = 'должна содержать разделитель"@"',
+  passwordLength = 'должен быть не короче 8 символов',
+  passwordUpperCase = 'должен содержать хотя бы одну заглавную букву A-Z',
+  passwordLowerCase = 'должен содержать хотя бы одну маленькую букву a-z',
+  passwordDigit = 'должен содержать хотя бы одну цифру',
+  passwordSymbol = 'должен содержать хотя бы один специальный символ',
+  hasSpaces = 'содержит пробелы',
+  passwordEqual = 'пароли должны совпадать',
+  postalRU = 'почтовый код страны должен быть формата NNNNNN',
+  postalUS = 'почтовый код страны должен быть формата NNNNN или NNNNN-NNNN',
+}
+
 interface IProduct {
   name: string
   image: string
@@ -77,6 +99,7 @@ interface IProduct {
   prices?: Price[]
   id: string
 }
+
 export {
   AUTH_ACTION_TYPES,
   AddressProp,
@@ -86,4 +109,6 @@ export {
   IProduct,
   PersonalProp,
   authActionType,
+  ChangeType,
+  ErrorMessages,
 }

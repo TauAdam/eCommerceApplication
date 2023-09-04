@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useReducer, ChangeEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../share/login.css'
-import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/validation'
+
 import { createCustomer, getCustomerToken, loginCustomer } from 'utils/requests'
-import ErrorMessage from 'components/share/errorMessage'
+
+import { ErrorMessages } from 'components/share/types'
+import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/helpFunctions'
+
 import { HandleAuthActions, initialState, reducer } from './authReducer'
+
+import ErrorMessage from 'components/share/errorMessage'
 import Address from 'components/SignUp/Address'
 import Personal from './Personal'
 
@@ -70,14 +74,13 @@ function SignUp() {
 
   function validatePasswordSubmit(event: ChangeEvent<HTMLInputElement>, secondPassword: string) {
     const password = event.target.value
-    const message = 'пароли должны совпадать'
-    const index = state.passwordErrors.indexOf(message)
+    const index = state.passwordErrors.indexOf(ErrorMessages.passwordEqual)
     if (password === secondPassword) {
-      const errors = state.passwordErrors.filter((x) => x !== message)
+      const errors = state.passwordErrors.filter((x) => x !== ErrorMessages.passwordEqual)
       actions.setPasswordErrors(errors)
       return
     } else if (index === -1) {
-      actions.setPasswordErrors([...state.passwordErrors, message])
+      actions.setPasswordErrors([...state.passwordErrors, ErrorMessages.passwordEqual])
     }
   }
 

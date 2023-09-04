@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react'
-import ErrorMessage from '../share/errorMessage'
-import '../share/login.css'
-import { getInputStyle } from '../share/validation'
-import { validateAll } from './validatePersonal'
+
 import { PersonalProp } from 'components/share/types'
+
+import { getInputStyle } from '../share/helpFunctions'
+import { validateAll } from './validatePersonal'
+
+import ErrorMessage from '../share/errorMessage'
 
 export default function Personal(props: PersonalProp) {
   const [errors, setErrors] = useState([] as string[])

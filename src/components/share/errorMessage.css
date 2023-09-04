@@ -1,0 +1,25 @@
+.errors {
+  margin: 0 auto;
+  width: fit-content;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.errors li {
+  text-align: left;
+  font-size: 0.6;
+  color: #aa3333;
+}
+
+.errors ul {
+  margin-top: 0.5rem;
+}
+
+.error-image {
+  position: relative;
+  top: 0.3rem;
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+}

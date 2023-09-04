@@ -57,6 +57,11 @@ const Header = () => {
             fill="#838383"
           />
         </svg>
+        <div className={`burger__icon ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         <ul className={`nav__list ${isMenuOpen ? 'open' : ''}`}>
           <li className={`nav__item ${location.pathname === '/catalog' ? 'active' : ''}`}>
             <Link to="/catalog">Catalog Product</Link>
@@ -70,6 +75,11 @@ const Header = () => {
           <li className={`nav__item ${location.pathname === '/signup' ? 'active' : ''}`}>
             <Link to="/signup">Sign up</Link>
           </li>
+          {isAuthenticated && (
+            <li className={`nav__item ${location.pathname === '/profile' ? 'active' : ''}`}>
+              <Link to="/profile">My profile</Link>
+            </li>
+          )}
           {isAuthenticated && (
             <li className={`nav__item ${location.pathname === '/exit' ? 'active' : ''}`}>
               <Link to="/" onClick={handleExitClick}>

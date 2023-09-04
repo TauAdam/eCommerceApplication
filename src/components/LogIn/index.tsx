@@ -1,14 +1,11 @@
 import React, { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import '../share/login.css'
-import {
-  validateEmail,
-  validatePassword,
-  getSourceImage,
-  getPasswordType,
-  getInputStyle,
-} from 'components/share/validation'
+
 import { getCustomerToken, loginCustomer } from 'utils/requests'
+
+import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/helpFunctions'
+import { validateEmail, validatePassword } from 'components/share/validation'
+
 import ErrorMessage from 'components/share/errorMessage'
 
 function LogIn() {

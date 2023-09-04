@@ -1,0 +1,150 @@
+@font-face {
+    font-weight: 400;
+    font-family: Montserrat;
+    src: url('../../assets/fonts/Montserrat-Regular.ttf');
+  }
+
+  @font-face {
+    font-weight: 600;
+    font-family: Montserrat;
+    src: url('../../assets/fonts/Montserrat-SemiBold.ttf');
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .address-header {
+    font-size: 1rem;
+    width: fit-content;
+    margin: 0.5rem auto;
+  }
+
+  .address-label {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .registration {
+    position: relative;
+    max-width: 950px;
+    margin: auto;
+    height: fit-content;
+    padding: 1rem;
+    background: #eaeaea;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    font-family: Montserrat, sans-serif;
+  }
+
+  .welcome-text {
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+    color: #1c1c27;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .input {
+    display: block;
+    margin: 1.25rem auto;
+    padding: 0.5rem 0.75rem;
+    width: 80%;
+    max-width: 24rem;
+    border-radius: 0.94rem;
+    background: #d6d6d6;
+    font-size: 0.94rem;
+  }
+
+  .input-error {
+    border: 2px solid #aa3333;
+  }
+
+  .address-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  .address-container .input-label {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    right: 3.5rem;
+    width: 80%;
+  }
+
+  .input-label span {
+    position: absolute;
+    left: 5vw;
+    display: block;
+    width: 7rem;
+    font-size: 0.75rem;
+    align-self: center;
+    text-align: end;
+  }
+
+  .input-label .input {
+    width: auto;
+    margin: 0.5rem 0 0.5rem 0.5rem;
+    flex-grow: 2;
+  }
+
+  .submit {
+    display: block;
+    margin: 0.63rem auto 0.63rem auto;
+    width: 50%;
+    border-radius: 0.94rem;
+    background: #101010;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .switch-message {
+    color: #838383;
+    font-size: 0.94rem;
+  }
+
+  .switch-button {
+    color: #ffa542;
+    font-size: 0.94rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .password-container {
+    position: relative;
+    margin: 0 auto;
+    max-width: 30rem;
+  }
+
+  .password-vision {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translate(50%, -50%);
+    margin: auto 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .input-label span {
+      /* position: static; */
+      left: 0;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .input-label span {
+      position: static;
+    }
+    .input-label .input {
+      max-width: 57%;
+    }
+  }

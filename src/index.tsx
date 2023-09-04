@@ -11,6 +11,7 @@ import './index.css'
 import { CatalogPage } from './pages/CatalogPage'
 import ErrorPage from './pages/Error/ErrorPage'
 import { Product } from './pages/Product/Product'
+import Profile from './pages/Profile/Profile'
 import { store } from './redux/store/store'
 
 const router = createBrowserRouter([
@@ -32,6 +33,12 @@ const router = createBrowserRouter([
   {
     path: '/product',
     element: <Product />,
+    errorElement: <ErrorPage />,
+  },
+  {
+  {
+    path: '/profile',
+    element: <Profile />,
     errorElement: <ErrorPage />,
   },
   {
