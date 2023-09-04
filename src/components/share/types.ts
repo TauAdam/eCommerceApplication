@@ -72,7 +72,28 @@ interface IAuthState {
   shippingAddress: IAddress
 }
 
-type ChangeType = Record<string, string | IAddress>
+enum CategoryID {
+  bottomsWomen = '073218e8-8405-4757-8eea-e3459bd8dd95',
+  topsWomen = '923ccd73-0b4b-4c33-85cc-577c2421a4ac',
+  otherWomen = 'eb5e2629-13ed-464c-866b-d58ff9c3e7de',
+  women = '93be046b-b950-4016-828e-53bb1d2ee8cd',
+  bottomsMen = 'abb8c1ff-7971-4725-b8d1-37a93ddc8798',
+  topsMen = 'a3a8856a-4812-408c-adc0-1c4e7ff6d9c1',
+  otherMen = '071da2cc-06bd-4f46-bf13-e1bd97b4d19a',
+  men = '8f24ebd0-f217-4564-95d3-c221d49df3c4',
+  clothingKids = 'ede97e13-2c69-4ee5-8a11-71a2dc2c599e',
+  bottomsKids = '6c179656-3eb9-4bb1-932e-56b5accda0f1',
+  topsKids = 'fcdb822f-3907-4e0d-9aca-77b17c22f82c',
+  otherKids = 'c1d44932-1749-4996-87bc-d2c03828b3f8',
+  kids = '109398d0-4d73-4ba9-9471-37bfdd3d8980',
+}
+
+type UpdateCategory = {
+  typeId: 'category'
+  id: CategoryID
+}
+
+type ChangeType = Record<string, string | IAddress | UpdateCategory>
 
 enum ErrorMessages {
   hasDigit = 'содержит цифру',
@@ -100,6 +121,23 @@ interface IProduct {
   id: string
 }
 
+interface ICategory {
+  typeId: 'category'
+  id: string
+}
+
+interface IProductCategory {
+  masterData: {
+    current: {
+      categories: ICategory[]
+    }
+  }
+}
+
+type Products = {
+  results: IProductCategory[]
+}
+
 export {
   AUTH_ACTION_TYPES,
   AddressProp,
@@ -107,8 +145,10 @@ export {
   IAddress,
   IAuthState,
   IProduct,
+  Products,
   PersonalProp,
   authActionType,
   ChangeType,
   ErrorMessages,
+  CategoryID,
 }
