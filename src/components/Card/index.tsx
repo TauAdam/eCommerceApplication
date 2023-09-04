@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { IProduct } from '../share/types'
 import s from './Card.module.css'
 
@@ -29,25 +30,27 @@ export function Card({ item }: Props) {
     }
   }
   return (
-    <div className={s.card}>
-      <div className={s.imgContainer}>
-        <img className={s.cardImage} src={item.image} alt={item.name} />
-      </div>
-      <div className={s.cardContent}>
-        <div className={s.cardTitle}>{item.name}</div>
-        {discountedPrice && originalPrice ? (
-          <div className={s.cardPrice}>
-            <span className={s.priceDiscounted}>{discountedPrice}</span>
-            <span className={s.priceOriginal}>{originalPrice}</span>
-          </div>
-        ) : (
-          originalPrice && (
+    <Link to={`/catalog/${item.id}`}>
+      <div className={s.card}>
+        <div className={s.imgContainer}>
+          <img className={s.cardImage} src={item.image} alt={item.name} />
+        </div>
+        <div className={s.cardContent}>
+          <div className={s.cardTitle}>{item.name}</div>
+          {discountedPrice && originalPrice ? (
             <div className={s.cardPrice}>
-              <span className={s.priceSimple}>{originalPrice}</span>
+              <span className={s.priceDiscounted}>{discountedPrice}</span>
+              <span className={s.priceOriginal}>{originalPrice}</span>
             </div>
-          )
-        )}
+          ) : (
+            originalPrice && (
+              <div className={s.cardPrice}>
+                <span className={s.priceSimple}>{originalPrice}</span>
+              </div>
+            )
+          )}
+        </div>
       </div>
-    </div>
+    </Link>
   )
 }
