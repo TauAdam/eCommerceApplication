@@ -1,12 +1,10 @@
 .background {
   display: flex;
   justify-content: center;
-  background: #eaeaea;
 }
 
 .wrapper {
   position: relative;
-  max-width: 1440px;
   width: 100%;
   display: flex;
   align-items: center;

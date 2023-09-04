@@ -9,8 +9,8 @@ import Enter from 'pages/Enter/Enter'
 import Registration from 'pages/Registration/Registration'
 import './index.css'
 import { CatalogPage } from './pages/CatalogPage'
+import { DetailedProductPage } from './pages/DetailedProductPage'
 import ErrorPage from './pages/Error/ErrorPage'
-import { Product } from './pages/Product/Product'
 import Profile from './pages/Profile/Profile'
 import { store } from './redux/store/store'
 
@@ -31,12 +31,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/product',
-    element: <Product />,
-    errorElement: <ErrorPage />,
-  },
-  {
-  {
     path: '/profile',
     element: <Profile />,
     errorElement: <ErrorPage />,
@@ -44,6 +38,11 @@ const router = createBrowserRouter([
   {
     path: '/catalog',
     element: <CatalogPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/catalog/:productId',
+    element: <DetailedProductPage />,
     errorElement: <ErrorPage />,
   },
 ])
