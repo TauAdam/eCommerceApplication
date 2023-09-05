@@ -1,52 +1,27 @@
-import React, { useState } from 'react'
-import './style.css'
+import { Product } from '@commercetools/platform-sdk'
+import React from 'react'
+import s from './DetailedProduct.module.css'
 
-interface Product {
-  name: string
-  price: number
-  image: string
-  description: string
-  features: string[]
-}
-
-interface DetailedProductProps {
+interface Props {
   product: Product
 }
 
-export function DetailedProduct({ product }: DetailedProductProps) {
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isInCart, setIsInCart] = useState(false)
-
-  function handleAddToCart() {
-    // Добавить логику для добавления товара в корзину
-    setIsInCart(true)
-  }
-
-  function handleToggleFavorite() {
-    // Добавить логику для добавления/удаления товара из избранного
-    setIsFavorite(!isFavorite)
-  }
+export function DetailedProduct({ product }: Props) {
+  const name = product.masterData.current.name['en-US']
+  const description = product.masterData.current.description?.['en-US']
+  const { images } = product.masterData.current.masterVariant
 
   return (
-    <div className="detailed-product">
-      <img src={product.image} alt={product.name} className="product-image" />
-      <h2>{product.name}</h2>
-      <p className="product-price">${product.price}</p>
-      <p className="product-description">{product.description}</p>
-      <div className="product-features">
-        <h3>Features:</h3>
-        <ul>
-          {product.features.map((feature, index) => (
-            <li key={index}>{feature}</li>
+    <div className={s.detailedProduct}>
+      <div className={s.body}>
+        <div className={s.imagesContainer}>
+          {images?.map((image) => (
+            <img key={image.url} src={image.url} alt={name} className={s.image} />
           ))}
-        </ul>
+        </div>
+        <div className={s.name}>{name}</div>
       </div>
-      <button onClick={handleAddToCart} disabled={isInCart}>
-        {isInCart ? 'In Cart' : 'Add to Cart'}
-      </button>
-      <button onClick={handleToggleFavorite}>
-        {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-      </button>
+      <p className={s.description}>{description}</p>
     </div>
   )
 }

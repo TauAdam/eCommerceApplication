@@ -1,4 +1,4 @@
-import { ProductPagedQueryResponse } from '@commercetools/platform-sdk'
+import { Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk'
 import { ICustomer } from 'components/ProfileInfo/ProfileTypes'
 import { ChangeType, IAddress } from 'components/share/types'
 
@@ -71,6 +71,25 @@ export async function getProductsFromApi() {
 
   const responseData: ProductPagedQueryResponse = await response.json()
   return responseData.results
+}
+export async function fetchProductDetails(id: string) {
+  const apiUrl = `${apiYrl}/${projectKey}/products/${id}`
+
+  const accessToken = getCookie()
+
+  const response = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch product: ${response.statusText}`)
+  }
+
+  const responseData: Product = await response.json()
+  return responseData
 }
 
 async function getAccessToken() {
