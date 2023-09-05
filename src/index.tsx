@@ -11,7 +11,7 @@ import './index.css'
 import { CatalogPage } from './pages/CatalogPage'
 import { DetailedProductPage } from './pages/DetailedProductPage'
 import ErrorPage from './pages/Error/ErrorPage'
-import Profile from './pages/Profile/Profile'
+import Profile from './pages/Profile'
 import { store } from './redux/store/store'
 
 const router = createBrowserRouter([
