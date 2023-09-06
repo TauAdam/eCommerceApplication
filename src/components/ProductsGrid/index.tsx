@@ -8,6 +8,7 @@ interface Props {
 }
 
 export function ProductsGrid({ data }: Props) {
+  console.log(data)
   return (
     <div className={s.productGrid}>
       {data.map((el) => (
