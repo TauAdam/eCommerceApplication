@@ -1,21 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Product, arrowStyle, getProduct, handleAttributes, handlePrice } from './helpFunctions'
+import arrowImage from '../../../src/assets/images/arrow.png'
 import './style.css'
 
-interface Product {
-  name: string
-  price: number
-  image: string
-  description: string
-  features: string[]
-}
-
 interface DetailedProductProps {
-  product: Product
+  id: string
 }
 
-export function DetailedProduct({ product }: DetailedProductProps) {
+const initialProductState: Product = {
+  name: 'Product name',
+  image: 'Product image',
+  description: 'Sample description',
+  id: '',
+  prices: undefined,
+  attributes: undefined,
+}
+
+export function DetailedProduct(props: DetailedProductProps) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isInCart, setIsInCart] = useState(false)
+  const [product, setProduct] = useState(initialProductState as Product)
+  const [openFeatures, setOpenFeatures] = useState(false)
+
+  useEffect(() => {
+    getProduct(props.id, setProduct)
+  }, [props.id])
 
   function handleAddToCart() {
     // Добавить логику для добавления товара в корзину
@@ -29,24 +38,37 @@ export function DetailedProduct({ product }: DetailedProductProps) {
 
   return (
     <div className="detailed-product">
-      <img src={product.image} alt={product.name} className="product-image" />
       <h2>{product.name}</h2>
-      <p className="product-price">${product.price}</p>
-      <p className="product-description">{product.description}</p>
-      <div className="product-features">
-        <h3>Features:</h3>
-        <ul>
-          {product.features.map((feature, index) => (
-            <li key={index}>{feature}</li>
-          ))}
-        </ul>
+      <div className="detailed-pruduct__image-wrapper">
+        <img src={product.image} alt={product.name} className="product-image" />
+        <p className="product-price">$&nbsp;{handlePrice(product.prices)}</p>
       </div>
-      <button onClick={handleAddToCart} disabled={isInCart}>
-        {isInCart ? 'In Cart' : 'Add to Cart'}
-      </button>
-      <button onClick={handleToggleFavorite}>
-        {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-      </button>
+      <div className="detailed-product__features-wrapper">
+        <div className="product-features">
+          <button
+            onClick={() => {
+              setOpenFeatures(!openFeatures)
+            }}
+          >
+            Features and description
+            <img src={arrowImage} alt="arrow" className={arrowStyle(openFeatures)} />
+          </button>
+          {openFeatures && (
+            <>
+              <ul>{handleAttributes(product.attributes)}</ul>
+              <p className="product-description">{product.description}</p>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="detailed-product__button-wrapper">
+        <button onClick={handleAddToCart} disabled={isInCart}>
+          {isInCart ? 'In Cart' : 'Add to Cart'}
+        </button>
+        <button onClick={handleToggleFavorite}>
+          {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+        </button>
+      </div>
     </div>
   )
 }
