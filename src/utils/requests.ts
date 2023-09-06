@@ -30,7 +30,7 @@ export async function getToken() {
   const accessToken = tokenData.access_token
 
   document.cookie = `access_token=${accessToken}; expires=${new Date(
-    tokenData.expires_in * 172800 + Date.now()
+    tokenData.expires_in + Date.now()
   ).toUTCString()}`
 
   console.log('Access Token:', accessToken)
