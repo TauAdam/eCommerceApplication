@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Product, arrowStyle, getProduct, handleAttributes, handlePrice } from './helpFunctions'
 import arrowImage from '../../../src/assets/images/arrow.png'
+import { transformPrices } from '../../utils/products'
+import { IProduct } from '../share/types'
+import { arrowStyle, getProduct, handleAttributes } from './helpFunctions'
 import './style.css'
 
 interface DetailedProductProps {
   id: string
 }
 
-const initialProductState: Product = {
+const initialProductState: IProduct = {
   name: 'Product name',
   image: 'Product image',
   description: 'Sample description',
@@ -19,8 +21,10 @@ const initialProductState: Product = {
 export function DetailedProduct(props: DetailedProductProps) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isInCart, setIsInCart] = useState(false)
-  const [product, setProduct] = useState(initialProductState as Product)
+  const [product, setProduct] = useState<IProduct>(initialProductState)
   const [openFeatures, setOpenFeatures] = useState(false)
+
+  const { originalPrice, discountedPrice } = transformPrices(product.prices)
 
   useEffect(() => {
     getProduct(props.id, setProduct)
@@ -38,10 +42,23 @@ export function DetailedProduct(props: DetailedProductProps) {
 
   return (
     <div className="detailed-product">
-      <h2>{product.name}</h2>
       <div className="detailed-pruduct__image-wrapper">
         <img src={product.image} alt={product.name} className="product-image" />
-        <p className="product-price">$&nbsp;{handlePrice(product.prices)}</p>
+        <div className="product-main">
+          <div className="product-name">{product.name}</div>
+          {discountedPrice && originalPrice ? (
+            <div className="prices-block">
+              <span className="price-discounted">{discountedPrice}</span>
+              <span className="price-original">{originalPrice}</span>
+            </div>
+          ) : (
+            originalPrice && (
+              <div className="prices-block">
+                <p className="product-price">{originalPrice}</p>
+              </div>
+            )
+          )}
+        </div>
       </div>
       <div className="detailed-product__features-wrapper">
         <div className="product-features">

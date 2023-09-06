@@ -1,4 +1,4 @@
-import { Price } from '@commercetools/platform-sdk'
+import { Attribute, Price } from '@commercetools/platform-sdk'
 
 interface ErrorProp {
   errorSource: string
@@ -117,8 +117,9 @@ interface IProduct {
   name: string
   image: string
   description?: string
-  prices?: Price[]
   id: string
+  prices?: Price[]
+  attributes?: Attribute[]
 }
 
 interface ICategory {
