@@ -33,7 +33,7 @@ export function Card({ item }: Props) {
     <Link to={`/catalog/${item.id}`}>
       <div className={s.card}>
         <div className={s.imgContainer}>
-          <img className={s.cardImage} src={item.image} alt={item.name} />
+          <img className={s.cardImage} src={item.images[0]} alt={item.name} />
         </div>
         <div className={s.cardContent}>
           <div className={s.cardTitle}>{item.name}</div>

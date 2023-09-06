@@ -4,7 +4,7 @@ import { Attribute, Price } from '@commercetools/platform-sdk'
 
 export interface Product {
   name: string
-  image: string
+  images: string[]
   description: string
   id: string
   prices: Price[] | undefined
@@ -13,6 +13,7 @@ export interface Product {
 
 export async function getProduct(id: string, callback: (arg: Product) => void) {
   const response = (await getProductById(id))[0]
+  console.log(response)
   callback(response)
 }
 

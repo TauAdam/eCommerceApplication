@@ -92,7 +92,7 @@ export async function getProductById(id: string) {
 
   const responseData: Product = await response.json()
   const result = parseFetchedData([responseData])
-  console.log(result[0])
+  console.log(responseData)
   return result
 }
 
@@ -356,6 +356,51 @@ export async function updateProduct(id: string, actions: ChangeType[], version: 
   }
 }
 
+export async function addProductImage(
+  id: string,
+  imageUrl: string,
+  dimentionW: number,
+  dimentionH: number,
+  variantId: number,
+  version: number = 1
+) {
+  const accessToken = await getAccessToken()
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/products/${id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        version,
+        actions: [
+          {
+            action: 'addExternalImage',
+            variantId,
+            image: {
+              url: imageUrl,
+              dimensions: {
+                w: dimentionW,
+                h: dimentionH,
+              },
+            },
+          },
+        ],
+      }),
+    })
+
+    const data = await response.json()
+    console.log('Обновлено:\n', data)
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
 export async function getProductsFromCategory(categoryId: string) {
   const apiUrl = `${apiYrl}/${projectKey}/products`
 
@@ -374,7 +419,7 @@ export async function getProductsFromCategory(categoryId: string) {
 
   const responseData: ProductPagedQueryResponse = await response.json()
   const products = responseData.results.filter((el) => {
-    const categories = el.masterData.current.categories
+    const categories = el.masterData.staged.categories
     return categories.some((category) => category.id === categoryId)
   })
   return products
