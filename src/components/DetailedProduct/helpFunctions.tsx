@@ -1,17 +1,9 @@
+import { Attribute } from '@commercetools/platform-sdk'
 import React from 'react'
 import { getProductById } from 'utils/requests'
-import { Attribute, Price } from '@commercetools/platform-sdk'
+import { IProduct } from '../share/types'
 
-export interface Product {
-  name: string
-  images: string[]
-  description: string
-  id: string
-  prices: Price[] | undefined
-  attributes: Attribute[] | undefined
-}
-
-export async function getProduct(id: string, callback: (arg: Product) => void) {
+export async function getProduct(id: string, callback: (arg: IProduct) => void) {
   const response = (await getProductById(id))[0]
   console.log(response)
   callback(response)
@@ -19,12 +11,6 @@ export async function getProduct(id: string, callback: (arg: Product) => void) {
 
 export const arrowStyle = (isOpen: boolean) =>
   isOpen ? 'product-features__arrow arrow-opened' : 'product-features__arrow'
-
-export const handlePrice = (priceArray: Price[] | undefined) => {
-  if (priceArray === undefined) return 0
-  const price = priceArray.find((el) => el.country === 'US')
-  return price ? (price.value.centAmount / 100).toFixed(2) : 0
-}
 
 export const handleAttributes = (attrArray: Attribute[] | undefined) => {
   if (attrArray === undefined) {

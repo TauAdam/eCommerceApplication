@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
 import s from './Card.module.css'
 
@@ -8,47 +9,32 @@ interface Props {
 }
 
 export function Card({ item }: Props) {
-  const { prices } = item
-  let discountedPrice
-  let originalPrice
+  const { prices, name, id, image, description } = item
+  const { originalPrice, discountedPrice } = transformPrices(prices)
 
-  if (prices) {
-    const priceVariant = prices[Math.floor(Math.random() * prices.length)]
-
-    if (priceVariant) {
-      const { value, discounted } = priceVariant
-      const { centAmount, fractionDigits, currencyCode } = value
-
-      originalPrice = `${centAmount / 10 ** fractionDigits} ${currencyCode}`
-
-      if (discounted) {
-        const { centAmount: discCentAmount, fractionDigits: discFractionDigits } = discounted.value
-        discountedPrice = `${discCentAmount / 10 ** discFractionDigits} ${
-          discounted.value.currencyCode
-        }`
-      }
-    }
-  }
   return (
-    <Link to={`/catalog/${item.id}`}>
+    <Link to={`/catalog/${id}`}>
       <div className={s.card}>
         <div className={s.imgContainer}>
-          <img className={s.cardImage} src={item.images[0]} alt={item.name} />
+          <img className={s.image} src={image} alt={name} />
         </div>
         <div className={s.cardContent}>
-          <div className={s.cardTitle}>{item.name}</div>
-          {discountedPrice && originalPrice ? (
-            <div className={s.cardPrice}>
-              <span className={s.priceDiscounted}>{discountedPrice}</span>
-              <span className={s.priceOriginal}>{originalPrice}</span>
-            </div>
-          ) : (
-            originalPrice && (
+          <div className={s.row}>
+            <div className={s.name}>{name}</div>
+            {discountedPrice && originalPrice ? (
               <div className={s.cardPrice}>
-                <span className={s.priceSimple}>{originalPrice}</span>
+                <span className={s.priceDiscounted}>{discountedPrice}</span>
+                <span className={s.priceOriginal}>{originalPrice}</span>
               </div>
-            )
-          )}
+            ) : (
+              originalPrice && (
+                <div className={s.cardPrice}>
+                  <span className={s.priceSimple}>{originalPrice}</span>
+                </div>
+              )
+            )}
+          </div>
+          <div className={s.description}>{description}</div>
         </div>
       </div>
     </Link>
