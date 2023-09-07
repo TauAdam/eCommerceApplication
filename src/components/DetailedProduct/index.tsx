@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import arrowImage from '../../../src/assets/images/arrow.png'
 import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
 import { arrowStyle, getProduct, handleAttributes } from './helpFunctions'
+import arrowImage from '../../../src/assets/images/arrow.png'
+import { Slider } from 'components/Slider'
 import './style.css'
 
 interface DetailedProductProps {
@@ -11,7 +12,7 @@ interface DetailedProductProps {
 
 const initialProductState: IProduct = {
   name: 'Product name',
-  image: 'Product image',
+  images: ['Product image'],
   description: 'Sample description',
   id: '',
   prices: undefined,
@@ -30,6 +31,10 @@ export function DetailedProduct(props: DetailedProductProps) {
     getProduct(props.id, setProduct)
   }, [props.id])
 
+  // useEffect(() => {
+  //   addProductImage('30a61993-fdda-4b60-9127-8c4a9785bd1a', necklaceImg, 400, 400, 1, 4)
+  // }, [props.id])
+
   function handleAddToCart() {
     // Добавить логику для добавления товара в корзину
     setIsInCart(true)
@@ -42,10 +47,10 @@ export function DetailedProduct(props: DetailedProductProps) {
 
   return (
     <div className="detailed-product">
+      <h2>{product.name}</h2>
       <div className="detailed-pruduct__image-wrapper">
-        <img src={product.image} alt={product.name} className="product-image" />
+        <Slider {...{ images: product.images, name: product.name }} />
         <div className="product-main">
-          <div className="product-name">{product.name}</div>
           {discountedPrice && originalPrice ? (
             <div className="prices-block">
               <span className="price-discounted">{discountedPrice}</span>

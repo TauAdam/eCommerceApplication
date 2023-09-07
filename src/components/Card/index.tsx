@@ -9,14 +9,14 @@ interface Props {
 }
 
 export function Card({ item }: Props) {
-  const { prices, name, id, image, description } = item
+  const { prices, name, id, images, description } = item
   const { originalPrice, discountedPrice } = transformPrices(prices)
 
   return (
     <Link to={`/catalog/${id}`}>
       <div className={s.card}>
         <div className={s.imgContainer}>
-          <img className={s.image} src={image} alt={name} />
+          <img className={s.image} src={images[0]} alt={name} />
         </div>
         <div className={s.cardContent}>
           <div className={s.row}>

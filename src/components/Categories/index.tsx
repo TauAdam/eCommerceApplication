@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-
 import { Category, categories } from 'components/share/categories'
 import { getProductsFromCategory } from 'utils/requests'
 import { useAppDispatch } from '../../hooks'
@@ -24,38 +23,36 @@ export default function Categories() {
     }
 
     return (
-      <>
-        <li
-          key={element.id}
-          onClick={async (event) => {
-            event.stopPropagation()
-            try {
-              dispatch(productsRequested())
+      <li
+        key={element.id}
+        onClick={async (event) => {
+          event.stopPropagation()
+          try {
+            dispatch(productsRequested())
 
-              const products = await getProductsFromCategory(element.id)
-              const productDetails = parseFetchedData(products)
+            const products = await getProductsFromCategory(element.id)
+            const productDetails = parseFetchedData(products)
 
-              dispatch(productsLoaded(productDetails))
-            } catch (error) {
-              if (error instanceof Error) {
-                dispatch(productsError(error.message))
-              }
+            dispatch(productsLoaded(productDetails))
+          } catch (error) {
+            if (error instanceof Error) {
+              dispatch(productsError(error.message))
             }
+          }
 
-            const chain = updateCategoryChain(event, element.id)
-            setChain(chain)
-          }}
-        >
-          <span className={hasChild(children.length)}>{element.title}</span>
-          {children.length > 0 && (
-            <ul>
-              {children.map((child) => {
-                return showCategory(child)
-              })}
-            </ul>
-          )}
-        </li>
-      </>
+          const chain = updateCategoryChain(event, element.id)
+          setChain(chain)
+        }}
+      >
+        <span className={hasChild(children.length)}>{element.title}</span>
+        {children.length > 0 && (
+          <ul>
+            {children.map((child) => {
+              return <div key={child.id}>{showCategory(child)}</div>
+            })}
+          </ul>
+        )}
+      </li>
     )
   }
 
@@ -83,14 +80,14 @@ export default function Categories() {
 
   const showChain = (elements: string[]) => {
     const lastIndex = elements.length - 1
-    const addDevider = (index: number, lastIndex: number) => (index === lastIndex ? '' : ' > ')
+    const addDivider = (index: number, lastIndex: number) => (index === lastIndex ? '' : ' > ')
     const setActive = (index: number, lastIndex: number) =>
       index === lastIndex ? 'category__element active' : 'category__element'
     return elements.map((element, index) => (
-      <>
-        <span className={setActive(index, lastIndex)}>{element}</span>
-        {addDevider(index, lastIndex)}
-      </>
+      <span key={index} className={setActive(index, lastIndex)}>
+        {element}
+        {addDivider(index, lastIndex)}
+      </span>
     ))
   }
 

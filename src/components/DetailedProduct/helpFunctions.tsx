@@ -5,6 +5,7 @@ import { IProduct } from '../share/types'
 
 export async function getProduct(id: string, callback: (arg: IProduct) => void) {
   const response = (await getProductById(id))[0]
+  console.log(response)
   callback(response)
 }
 

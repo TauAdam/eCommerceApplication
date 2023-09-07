@@ -93,7 +93,7 @@ type UpdateCategory = {
   id: CategoryID
 }
 
-type ChangeType = Record<string, string | IAddress | UpdateCategory>
+type ChangeType = Record<string, string | IAddress | UpdateCategory | Record<string, string>>
 
 enum ErrorMessages {
   hasDigit = 'содержит цифру',
@@ -115,7 +115,7 @@ enum ErrorMessages {
 
 interface IProduct {
   name: string
-  image: string
+  images: string[]
   description?: string
   id: string
   prices?: Price[]
