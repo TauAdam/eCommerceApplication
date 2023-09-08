@@ -120,6 +120,7 @@ interface IProduct {
   id: string
   prices?: Price[]
   attributes?: Attribute[]
+  sku?: string
 }
 
 interface ICategory {

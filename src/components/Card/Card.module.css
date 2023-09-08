@@ -81,3 +81,35 @@
   font-weight: 600;
   line-height: normal;
 }
+
+.card__addToCart {
+  margin: 0.25rem auto;
+  width: fit-content;
+}
+
+.card__addToCart h3 {
+  text-align: center;
+}
+
+.card__addRemoveButton {
+  margin: 0 1rem;
+  padding: 0.25rem 1rem;
+  font-size: 2rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.card__amount {
+  font-size: 2rem;
+  font-weight: 600;
+  cursor: auto;
+}
+
+.cartImage {
+  display: block;
+  margin: 0 auto;
+  height: 3rem;
+  width: 3rem;
+  fill: #101010;
+}

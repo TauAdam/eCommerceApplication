@@ -1,4 +1,4 @@
-import { Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk'
+import { Cart, Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk'
 import { ICustomer } from 'components/ProfileInfo/ProfileTypes'
 import { ChangeType, IAddress } from 'components/share/types'
 import { parseFetchedData } from './products'
@@ -32,8 +32,6 @@ export async function getToken() {
   document.cookie = `access_token=${accessToken}; expires=${new Date(
     tokenData.expires_in + Date.now()
   ).toUTCString()}`
-
-  console.log('Access Token:', accessToken)
 }
 
 export function getCookie() {
@@ -57,7 +55,7 @@ export function getCookie() {
 export async function getProductsFromApi() {
   const apiUrl = `${apiYrl}/${projectKey}/products`
 
-  const accessToken = getCookie()
+  const accessToken = await getAccessToken()
 
   const response = await fetch(apiUrl, {
     method: 'GET',
@@ -71,13 +69,14 @@ export async function getProductsFromApi() {
   }
 
   const responseData: ProductPagedQueryResponse = await response.json()
+  // console.log(responseData)
   return responseData.results
 }
 
 export async function getProductById(id: string) {
   const apiUrl = `${apiYrl}/${projectKey}/products/${id}`
 
-  const accessToken = getCookie()
+  const accessToken = await getAccessToken()
 
   const response = await fetch(apiUrl, {
     method: 'GET',
@@ -92,7 +91,6 @@ export async function getProductById(id: string) {
 
   const responseData: Product = await response.json()
   const result = parseFetchedData([responseData])
-  console.log(responseData)
   return result
 }
 
@@ -141,8 +139,6 @@ export async function createCustomer(
   if (billing.asDefault) newCustomer.defaultBillingAddress = 0
   if (shipping.asDefault) newCustomer.defaultShippingAddress = 1
 
-  console.log('Fetch body:\n', newCustomer)
-
   try {
     const response = await fetch(`${apiYrl}/${projectKey}/customers`, {
       method: 'POST',
@@ -184,8 +180,6 @@ export async function loginCustomer(customerEmail: string, customerPassword: str
     })
 
     const authData = await response.json()
-    console.log('customer-id: ', authData.customer.id)
-    // localStorage.setItem('customer-id', authData.customer.id) // можем сохранить корректно авторизованного пользователя
     return authData.customer.id || null
   } catch (error) {
     if (error instanceof Error) {
@@ -321,7 +315,6 @@ export async function getCategories() {
     })
 
     const data = await response.json()
-    console.log('Категории:\n', data)
     return data
   } catch (error) {
     if (error instanceof Error) {
@@ -425,25 +418,205 @@ export async function getProductsFromCategory(categoryId: string) {
   return products
 }
 
-// export async function getProductsFromCategory(id: string) {
-//   const apiUrl = `${apiYrl}/${projectKey}/product-projections/search?filter=categories.id:${id}`
+type createCartBody = {
+  currency: string
+  customerId?: string
+  customerEmail?: string
+  deleteDaysAfterLastModification?: number
+}
 
-//   const accessToken = getCookie()
+export async function getCart(id: string) {
+  const accessToken = await getAccessToken()
 
-//   const response = await fetch(apiUrl, {
-//     method: 'GET',
-//     headers: {
-//       Authorization: `Bearer ${accessToken}`,
-//     },
-//   })
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
 
-//   if (!response.ok) {
-//     throw new Error('API Call Failed')
-//   }
+    if (!response.ok) {
+      throw new Error('Getting cart failed!')
+    }
 
-//   const responseData = await response.json()
-//   for (const key in responseData) {
-//     console.log(responseData[key])
-//   }
-//   return responseData
-// }
+    const data = (await response.json()) as Cart
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function createCart(currency: string) {
+  const accessToken = await getAccessToken()
+
+  const requestBody: createCartBody = { currency }
+  const customer = JSON.parse(localStorage.getItem('customer') || '')
+  if (customer) {
+    requestBody.customerId = customer.customer_id
+    requestBody.customerEmail = customer.customer_email
+    requestBody.deleteDaysAfterLastModification = 1
+  }
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/carts`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+
+    if (!response.ok) {
+      throw new Error('Cart creation failed!')
+    }
+
+    const data = (await response.json()) as Cart
+    return data
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function addToCart(
+  id: string,
+  version: number,
+  sku: string,
+  quantity: number,
+  centAmount: number,
+  currencyCode: string = 'USD'
+) {
+  const accessToken = await getAccessToken()
+
+  const requestBody = {
+    version,
+    actions: [
+      {
+        action: 'addLineItem',
+        sku,
+        quantity,
+        externalTotalPrice: {
+          price: {
+            centAmount,
+            currencyCode,
+          },
+          totalPrice: {
+            centAmount: centAmount * quantity,
+            currencyCode,
+          },
+        },
+      },
+    ],
+  }
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+
+    if (response.status === 400) {
+      throw new Error('out of stock')
+    }
+
+    if (!response.ok) {
+      throw new Error('Add to cart failed!')
+    }
+
+    const data = (await response.json()) as Cart
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function updateQuantity(
+  id: string,
+  version: number,
+  lineItemId: string,
+  quantity: number,
+  centAmount: number,
+  currencyCode: string = 'USD'
+) {
+  const accessToken = await getAccessToken()
+
+  const requestBody = {
+    version,
+    actions: [
+      {
+        action: 'changeLineItemQuantity',
+        lineItemId,
+        quantity,
+        externalTotalPrice: {
+          price: {
+            centAmount,
+            currencyCode,
+          },
+          totalPrice: {
+            centAmount: centAmount * quantity,
+            currencyCode,
+          },
+        },
+      },
+    ],
+  }
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+
+    if (!response.ok) {
+      throw new Error('Update quantity failed!')
+    }
+
+    const data = (await response.json()) as Cart
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function removeFromCart(id: string, version: number, lineItemId: string) {
+  const accessToken = await getAccessToken()
+
+  const requestBody = {
+    version,
+    actions: [
+      {
+        action: 'removeLineItem',
+        lineItemId,
+      },
+    ],
+  }
+
+  try {
+    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+
+    if (!response.ok) {
+      throw new Error('Remove line item failed!')
+    }
+
+    const data = (await response.json()) as Cart
+    return data
+  } catch (error) {
+    throw error
+  }
+}
