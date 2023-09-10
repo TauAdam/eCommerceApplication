@@ -1,29 +1,32 @@
 import React, { useState } from 'react'
-import { addToCart, removeFromCart, updateQuantity } from 'utils/requests'
-import { getOrCreateCart } from './utils'
+import { addToCart, removeFromCart, updateQuantity } from 'utils/cart'
 import { Cart } from '@commercetools/platform-sdk'
 import cartImage from '../../../src/assets/images/cart.svg'
 import s from './Card.module.css'
 
 interface Props {
-  cartVersion: number
-  setCartVersion: (arg: number) => void
+  cart: Cart
+  setCart: (arg: Cart) => void
   productId: string
   centAmount: number
   sku: string
 }
 
-const cartState = await getOrCreateCart()
-
-const getLineItemId = async (cart: Cart, productID: string) => {
-  return cart.lineItems.filter((item) => item.productId === productID)[0].id || ''
+const getLineItemId = (cart: Cart, productID: string) => {
+  const lineItem = cart.lineItems.find((item) => item.productId === productID)
+  return lineItem?.id || ''
 }
 
-export function AddtoCart({ cartVersion, setCartVersion, centAmount, sku, productId }: Props) {
-  const [amount, setAmount] = useState(0)
-  const [cart, setCart] = useState(cartState)
-  const [lineItemId, setLineItemId] = useState('')
+const setInitialAmount = (cart: Cart, productID: string) => {
+  const lineItem = cart.lineItems.find((item) => item.productId === productID)
+  return lineItem?.quantity || 0
+}
+
+export function AddtoCart({ cart, setCart, sku, productId }: Props) {
+  const [amount, setAmount] = useState(setInitialAmount(cart, productId))
   const [outOfStock, setOutOfStock] = useState(false)
+
+  const lineItemId = getLineItemId(cart, productId)
 
   return (
     <div className={s.card__addToCart}>
@@ -37,19 +40,16 @@ export function AddtoCart({ cartVersion, setCartVersion, centAmount, sku, produc
                   event.stopPropagation()
                   const newAmount = amount - 1
                   if (newAmount === 0) {
-                    const newCart = await removeFromCart(cart.id, cartVersion, lineItemId)
+                    const newCart = await removeFromCart(cart.id, cart.version, lineItemId)
                     setCart(newCart)
-                    setCartVersion(newCart.version)
                   } else {
                     const newCart = await updateQuantity(
                       cart.id,
-                      cartVersion,
+                      cart.version,
                       lineItemId,
-                      newAmount,
-                      centAmount
+                      newAmount
                     )
                     setCart(newCart)
-                    setCartVersion(newCart.version)
                   }
                   setAmount(newAmount)
                 }}
@@ -62,15 +62,8 @@ export function AddtoCart({ cartVersion, setCartVersion, centAmount, sku, produc
                 onClick={async (event) => {
                   event.stopPropagation()
                   const newAmount = amount + 1
-                  const newCart = await updateQuantity(
-                    cart.id,
-                    cartVersion,
-                    lineItemId,
-                    newAmount,
-                    centAmount
-                  )
+                  const newCart = await updateQuantity(cart.id, cart.version, lineItemId, newAmount)
                   setCart(newCart)
-                  setCartVersion(newCart.version)
                   setAmount(newAmount)
                 }}
               >
@@ -87,11 +80,9 @@ export function AddtoCart({ cartVersion, setCartVersion, centAmount, sku, produc
                 if (sku === '') return
                 event.stopPropagation()
                 try {
-                  const newCart = await addToCart(cart.id, cartVersion, sku, 1, centAmount)
+                  const newCart = await addToCart(cart.id, cart.version, sku, 1)
                   setAmount(1)
                   setCart(newCart)
-                  setCartVersion(newCart.version)
-                  if (lineItemId === '') setLineItemId(await getLineItemId(newCart, productId))
                 } catch (e) {
                   console.log(e)
                   if (e instanceof Error && e.message === 'out of stock') {

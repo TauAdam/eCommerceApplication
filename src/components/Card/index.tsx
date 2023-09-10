@@ -4,11 +4,12 @@ import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
 import { AddtoCart } from './AddToCart'
 import s from './Card.module.css'
+import { Cart } from '@commercetools/platform-sdk'
 
 interface Props {
   item: IProduct
-  cartVersion: number
-  setCartVersion: (arg: number) => void
+  cart: Cart
+  setCart: (arg: Cart) => void
 }
 
 const handlePrice = (original: string | undefined, discounted: string | undefined) => {
@@ -17,7 +18,7 @@ const handlePrice = (original: string | undefined, discounted: string | undefine
   return 0
 }
 
-export function Card({ item, cartVersion, setCartVersion }: Props) {
+export function Card({ item, cart, setCart }: Props) {
   const { prices, name, id, images, description } = item
   const { originalPrice, discountedPrice } = transformPrices(prices)
 
@@ -48,8 +49,8 @@ export function Card({ item, cartVersion, setCartVersion }: Props) {
           <div className={s.description}>{description}</div>
           <AddtoCart
             {...{
-              cartVersion,
-              setCartVersion,
+              cart,
+              setCart,
               productId: item.id,
               centAmount: handlePrice(originalPrice, discountedPrice),
               sku: item.sku || '',

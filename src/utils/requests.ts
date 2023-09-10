@@ -1,4 +1,4 @@
-import { Cart, Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk'
+import { Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk'
 import { ICustomer } from 'components/ProfileInfo/ProfileTypes'
 import { ChangeType, IAddress } from 'components/share/types'
 import { parseFetchedData } from './products'
@@ -44,7 +44,7 @@ export function getCookie() {
       cookie = cookie.substring(1)
     }
     if (cookie.indexOf(name) === 0) {
-      console.log(cookie.substring(name.length, cookie.length))
+      // console.log(cookie.substring(name.length, cookie.length))
 
       return cookie.substring(name.length, cookie.length)
     }
@@ -199,7 +199,7 @@ export async function getCustomerToken(email: string, password: string) {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: 'Basic ' + btoa(`${myClientId}:${myClientSecret}`),
       },
-      body: `grant_type=password&username=${email}&password=${password}`,
+      body: `grant_type=password&username=${email}&password=${password}scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} view_categories:${projectKey}`,
     })
 
     const data = await response.json()
@@ -340,7 +340,6 @@ export async function updateProduct(id: string, actions: ChangeType[], version: 
     })
 
     const data = await response.json()
-    console.log('Обновлено:\n', data)
     return data
   } catch (error) {
     if (error instanceof Error) {
@@ -385,7 +384,6 @@ export async function addProductImage(
     })
 
     const data = await response.json()
-    console.log('Обновлено:\n', data)
     return data
   } catch (error) {
     if (error instanceof Error) {
@@ -416,207 +414,4 @@ export async function getProductsFromCategory(categoryId: string) {
     return categories.some((category) => category.id === categoryId)
   })
   return products
-}
-
-type createCartBody = {
-  currency: string
-  customerId?: string
-  customerEmail?: string
-  deleteDaysAfterLastModification?: number
-}
-
-export async function getCart(id: string) {
-  const accessToken = await getAccessToken()
-
-  try {
-    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-
-    if (!response.ok) {
-      throw new Error('Getting cart failed!')
-    }
-
-    const data = (await response.json()) as Cart
-    return data
-  } catch (error) {
-    throw error
-  }
-}
-
-export async function createCart(currency: string) {
-  const accessToken = await getAccessToken()
-
-  const requestBody: createCartBody = { currency }
-  const customer = JSON.parse(localStorage.getItem('customer') || '')
-  if (customer) {
-    requestBody.customerId = customer.customer_id
-    requestBody.customerEmail = customer.customer_email
-    requestBody.deleteDaysAfterLastModification = 1
-  }
-
-  try {
-    const response = await fetch(`${apiYrl}/${projectKey}/carts`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    })
-
-    if (!response.ok) {
-      throw new Error('Cart creation failed!')
-    }
-
-    const data = (await response.json()) as Cart
-    return data
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
-
-export async function addToCart(
-  id: string,
-  version: number,
-  sku: string,
-  quantity: number,
-  centAmount: number,
-  currencyCode: string = 'USD'
-) {
-  const accessToken = await getAccessToken()
-
-  const requestBody = {
-    version,
-    actions: [
-      {
-        action: 'addLineItem',
-        sku,
-        quantity,
-        externalTotalPrice: {
-          price: {
-            centAmount,
-            currencyCode,
-          },
-          totalPrice: {
-            centAmount: centAmount * quantity,
-            currencyCode,
-          },
-        },
-      },
-    ],
-  }
-
-  try {
-    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    })
-
-    if (response.status === 400) {
-      throw new Error('out of stock')
-    }
-
-    if (!response.ok) {
-      throw new Error('Add to cart failed!')
-    }
-
-    const data = (await response.json()) as Cart
-    return data
-  } catch (error) {
-    throw error
-  }
-}
-
-export async function updateQuantity(
-  id: string,
-  version: number,
-  lineItemId: string,
-  quantity: number,
-  centAmount: number,
-  currencyCode: string = 'USD'
-) {
-  const accessToken = await getAccessToken()
-
-  const requestBody = {
-    version,
-    actions: [
-      {
-        action: 'changeLineItemQuantity',
-        lineItemId,
-        quantity,
-        externalTotalPrice: {
-          price: {
-            centAmount,
-            currencyCode,
-          },
-          totalPrice: {
-            centAmount: centAmount * quantity,
-            currencyCode,
-          },
-        },
-      },
-    ],
-  }
-
-  try {
-    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    })
-
-    if (!response.ok) {
-      throw new Error('Update quantity failed!')
-    }
-
-    const data = (await response.json()) as Cart
-    return data
-  } catch (error) {
-    throw error
-  }
-}
-
-export async function removeFromCart(id: string, version: number, lineItemId: string) {
-  const accessToken = await getAccessToken()
-
-  const requestBody = {
-    version,
-    actions: [
-      {
-        action: 'removeLineItem',
-        lineItemId,
-      },
-    ],
-  }
-
-  try {
-    const response = await fetch(`${apiYrl}/${projectKey}/carts/${id}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    })
-
-    if (!response.ok) {
-      throw new Error('Remove line item failed!')
-    }
-
-    const data = (await response.json()) as Cart
-    return data
-  } catch (error) {
-    throw error
-  }
 }
