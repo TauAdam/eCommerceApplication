@@ -52,9 +52,9 @@ export function getCookie() {
   return null
 }
 
-export async function getProductsFromApi() {
-  const apiUrl = `${apiYrl}/${projectKey}/products`
-
+export async function getProductsFromApi(limit: number, currentPage: number = 0) {
+  let apiUrl = `${apiYrl}/${projectKey}/products`
+  if (limit) apiUrl += `?limit=${limit}&offset=${limit * currentPage}&withTotal=false`
   const accessToken = await getAccessToken()
 
   const response = await fetch(apiUrl, {
@@ -71,6 +71,25 @@ export async function getProductsFromApi() {
   const responseData: ProductPagedQueryResponse = await response.json()
   // console.log(responseData)
   return responseData.results
+}
+
+export async function getTotalProducts() {
+  const apiUrl = `${apiYrl}/${projectKey}/products`
+  const accessToken = await getAccessToken()
+
+  const response = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error('API Call Failed')
+  }
+
+  const responseData: ProductPagedQueryResponse = await response.json()
+  return responseData.total
 }
 
 export async function getProductById(id: string) {
