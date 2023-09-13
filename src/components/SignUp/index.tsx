@@ -2,10 +2,15 @@
 import React, { useReducer, ChangeEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { createCustomer, getCustomerToken, loginCustomer } from 'utils/requests'
+import { createCustomer, loginCustomer } from 'utils/requests'
 
 import { ErrorMessages } from 'components/share/types'
-import { getSourceImage, getPasswordType, getInputStyle } from 'components/share/helpFunctions'
+import {
+  getSourceImage,
+  getPasswordType,
+  getInputStyle,
+  setCustomerToLocalStorage,
+} from 'components/share/helpFunctions'
 
 import { HandleAuthActions, initialState, reducer } from './authReducer'
 
@@ -58,10 +63,7 @@ function SignUp() {
       console.log(state.lastName, state.firstName, state.dateOfBirth)
       console.log('Created customer\n', customer)
       const customerId = await loginCustomer(state.email, state.password)
-      const customerInfo = { ...(await getCustomerToken(state.email, state.password)) }
-      customerInfo.customer_email = state.email
-      customerInfo.customer_id = customerId
-      localStorage.setItem('customer', JSON.stringify(customerInfo))
+      setCustomerToLocalStorage(state.email, state.password, customerId)
 
       actions.setSubmitError('')
       navigate('/')

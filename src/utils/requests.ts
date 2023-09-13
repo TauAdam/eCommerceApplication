@@ -113,7 +113,7 @@ export async function getProductById(id: string) {
   return result
 }
 
-async function getAccessToken() {
+export async function getAccessToken() {
   let accessToken = getCookie()
 
   if (accessToken === null) {
@@ -218,7 +218,7 @@ export async function getCustomerToken(email: string, password: string) {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: 'Basic ' + btoa(`${myClientId}:${myClientSecret}`),
       },
-      body: `grant_type=password&username=${email}&password=${password}scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} view_categories:${projectKey}`,
+      body: `grant_type=password&username=${email}&password=${password}&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} view_categories:${projectKey}`,
     })
 
     const data = await response.json()

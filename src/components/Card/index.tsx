@@ -2,20 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
+import { Cart } from '@commercetools/platform-sdk'
+import { handlePrice } from 'components/share/handleCart'
 import { AddtoCart } from './AddToCart'
 import s from './Card.module.css'
-import { Cart } from '@commercetools/platform-sdk'
 
 interface Props {
   item: IProduct
   cart: Cart
   setCart: (arg: Cart) => void
-}
-
-const handlePrice = (original: string | undefined, discounted: string | undefined) => {
-  if (discounted) return Number(discounted.slice(1).split('.').join(''))
-  if (original) return Number(original.slice(1).split('.').join(''))
-  return 0
 }
 
 export function Card({ item, cart, setCart }: Props) {

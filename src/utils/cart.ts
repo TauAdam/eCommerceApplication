@@ -3,6 +3,8 @@ import { Cart } from '@commercetools/platform-sdk'
 const projectKey = 'my-project98'
 const apiYrl = 'https://api.europe-west1.gcp.commercetools.com'
 const authUrl = 'https://auth.europe-west1.gcp.commercetools.com'
+const myClientId = 'NRuZMmzXpEZWUH1MO6ChBpxM'
+const myClientSecret = 'HlHla0jmI9H8J9EMsOjF5Mzq4t78Q-Cg'
 
 type createCartBody = {
   currency: string
@@ -18,11 +20,10 @@ interface IAnonumousToken {
   scope: string
   refresh_token: string
   token_type: 'Bearer'
+  token_date?: number
 }
 
 async function getAnonymousToken() {
-  const myClientId = 'NRuZMmzXpEZWUH1MO6ChBpxM' // TODO: make global variables
-  const myClientSecret = 'HlHla0jmI9H8J9EMsOjF5Mzq4t78Q-Cg'
   try {
     const response = await fetch(`${authUrl}/oauth/${projectKey}/anonymous/token`, {
       method: 'POST',
@@ -34,6 +35,8 @@ async function getAnonymousToken() {
     })
 
     const data = (await response.json()) as IAnonumousToken
+    const now = new Date().getTime()
+    data.token_date = now
     localStorage.setItem('anonymous', JSON.stringify(data))
     return data
   } catch (error) {
@@ -69,14 +72,63 @@ function getFromLocal(localName: string) {
   return customerString ? JSON.parse(customerString) : null
 }
 
+interface IRefreshResponse {
+  access_token: string
+  expires_in: number
+  scope: string
+  token_type: 'Bearer'
+}
+
+async function refreshToken(refresh: string) {
+  try {
+    const response = await fetch(`${authUrl}/oauth/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + btoa(`${myClientId}:${myClientSecret}`),
+      },
+      body: `grant_type=refresh_token&refresh_token=${refresh}`,
+    })
+
+    const data = (await response.json()) as IRefreshResponse
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    }
+  }
+}
+
 async function getTokenFromLocal(): Promise<string> {
   const customer = getFromLocal('customer')
-
+  const now = new Date().getTime()
   if (customer) {
+    if (now > customer.token_date + customer.expires_in * 1000) {
+      const newAccess = await refreshToken(customer.refresh_token)
+      customer.access_token = newAccess?.access_token
+      customer.token_date = now
+      if (newAccess && newAccess.access_token) {
+        localStorage.setItem('customer', JSON.stringify(customer))
+        return newAccess.access_token
+      } else {
+        throw new Error('current token expired. Failed to get refresh token')
+      }
+    }
     return customer.access_token
   } else {
     const anonymous = getFromLocal('anonymous')
     if (anonymous) {
+      if (now > anonymous.token_date + anonymous.expires_in * 1000) {
+        const newAccess = await refreshToken(anonymous.refresh_token)
+        anonymous.access_token = newAccess?.access_token
+        anonymous.token_date = now
+        if (newAccess && newAccess.access_token) {
+          localStorage.setItem('anonymous', JSON.stringify(anonymous))
+          return newAccess.access_token
+        } else {
+          throw new Error('current anonymous token expired. Failed to update with refresh token')
+        }
+      }
       return anonymous.access_token
     } else {
       const anonymousToken = await getAnonymousToken()

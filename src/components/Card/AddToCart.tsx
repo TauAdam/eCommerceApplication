@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addToCart, removeFromCart, updateQuantity } from 'utils/cart'
 import { Cart } from '@commercetools/platform-sdk'
 import cartImage from '../../../src/assets/images/cart.svg'
 import s from './Card.module.css'
+import { getLineItemId, setInitialAmount } from 'components/share/handleCart'
 
 interface Props {
   cart: Cart
@@ -12,19 +13,17 @@ interface Props {
   sku: string
 }
 
-const getLineItemId = (cart: Cart, productID: string) => {
-  const lineItem = cart.lineItems.find((item) => item.productId === productID)
-  return lineItem?.id || ''
-}
-
-const setInitialAmount = (cart: Cart, productID: string) => {
-  const lineItem = cart.lineItems.find((item) => item.productId === productID)
-  return lineItem?.quantity || 0
-}
-
 export function AddtoCart({ cart, setCart, sku, productId }: Props) {
-  const [amount, setAmount] = useState(setInitialAmount(cart, productId))
+  const initialAmount = setInitialAmount(cart, productId)
+  console.log(productId, 'AMOUNT', initialAmount)
+  const [amount, setAmount] = useState(initialAmount)
   const [outOfStock, setOutOfStock] = useState(false)
+  console.log(productId, 'AMOUNT', initialAmount)
+  console.log(productId, 'CURRENT AMOUNT', amount)
+
+  useEffect(() => {
+    setAmount(initialAmount)
+  }, [initialAmount])
 
   const lineItemId = getLineItemId(cart, productId)
 
