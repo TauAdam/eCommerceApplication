@@ -10,6 +10,7 @@ import Registration from 'pages/Registration/Registration'
 import './index.css'
 import { CatalogPage } from './pages/CatalogPage'
 import { DetailedProductPage } from './pages/DetailedProductPage'
+import { AboutUsPage } from 'pages/AboutUs'
 import ErrorPage from './pages/Error/ErrorPage'
 import Profile from './pages/Profile'
 import { store } from './redux/store/store'
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
   {
     path: '/catalog/:productId',
     element: <DetailedProductPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/aboutus',
+    element: <AboutUsPage />,
     errorElement: <ErrorPage />,
   },
 ])

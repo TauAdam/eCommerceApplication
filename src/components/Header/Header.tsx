@@ -72,6 +72,9 @@ const Header = () => {
               <Link to="/profile">My profile</Link>
             </li>
           )}
+          <li className={`nav__item ${location.pathname === '/aboutus' ? 'active' : ''}`}>
+            <Link to="/aboutus">About us</Link>
+          </li>
           {isAuthenticated && (
             <li className={`nav__item ${location.pathname === '/exit' ? 'active' : ''}`}>
               <Link to="/" onClick={handleExitClick}>

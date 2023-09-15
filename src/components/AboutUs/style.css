@@ -1,0 +1,12 @@
+.about {
+  background-color: #FFFFFF;
+  padding: 0 10%;
+}
+
+.memberPhoto {
+  border-radius: 50px;
+  margin: 0 2rem;
+  width: 350px;
+  height: 300px;
+  float: right;
+}

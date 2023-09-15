@@ -113,3 +113,21 @@
   width: 3rem;
   fill: #101010;
 }
+
+.manualQuantity {
+  display: flex;
+  margin: 0.5rem 0;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.manualQuantity input {
+  width: 75px;
+}
+
+.PointerBold {
+  margin: 0 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
