@@ -63,13 +63,15 @@ export function Catalog() {
       <Categories />
       {loading && <h1>Loading...</h1>}
       <ProductsGrid data={productsList} />
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        lastPage={lastPage}
-        limit={limit}
-        setLimit={setLimit}
-      />
+      {!loading && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          lastPage={lastPage}
+          limit={limit}
+          setLimit={setLimit}
+        />
+      )}
     </div>
   )
 }

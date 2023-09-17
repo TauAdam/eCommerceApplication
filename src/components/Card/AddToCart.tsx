@@ -118,7 +118,12 @@ export function AddtoCart({ cart, setCart, sku, productId }: Props) {
                     if (input) {
                       const newAmount = Number(input.value)
                       if (amount < 0) return
-                      updateAmount(cart, lineItemId, newAmount, setCart, setAmount)
+                      if (lineItemId === '') {
+                        const newCart = await addToCart(cart.id, cart.version, sku, newAmount)
+                        setCart(newCart)
+                      } else {
+                        updateAmount(cart, lineItemId, newAmount, setCart, setAmount)
+                      }
                       setShowInput(false)
                     }
                   }}

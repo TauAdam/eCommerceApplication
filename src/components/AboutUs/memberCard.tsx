@@ -11,6 +11,7 @@ interface Prop {
 export function MemberCard({ member, index }: Prop) {
   return (
     <div className="memberCard">
+      <hr />
       {index === 0 && <img className="memberPhoto" src={denisPhoto} alt={`${member.name} photo`} />}
       <h2>{member.name}</h2>
       <h3>Job: {member.job}</h3>
@@ -29,7 +30,6 @@ export function MemberCard({ member, index }: Prop) {
       <a href={member.githubLink} target="_blank" rel="noreferrer">
         Link to {member.name} github
       </a>
-      <hr />
     </div>
   )
 }
