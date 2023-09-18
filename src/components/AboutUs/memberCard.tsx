@@ -1,18 +1,16 @@
 import React from 'react'
 import { IMember } from './membersData'
-import denisPhoto from '../../assets/images/denis.jpg'
 import './style.css'
 
-interface Prop {
-  index?: number
+interface Props {
   member: IMember
 }
 
-export function MemberCard({ member, index }: Prop) {
+export function MemberCard({ member }: Props) {
   return (
     <div className="memberCard">
       <hr />
-      {index === 0 && <img className="memberPhoto" src={denisPhoto} alt={`${member.name} photo`} />}
+      <img className="memberPhoto" src={member.photo} alt={`${member.name} photo`} />
       <h2>{member.name}</h2>
       <h3>Job: {member.job}</h3>
       <h3>My bio:</h3>
