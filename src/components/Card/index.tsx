@@ -1,9 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { transformPrices } from '../../utils/products'
-import { IProduct } from '../share/types'
 import { Cart } from '@commercetools/platform-sdk'
 import { handlePrice } from 'components/share/handleCart'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { transformPrices } from '../../utils/prices'
+import { IProduct } from '../share/types'
 import { AddtoCart } from './AddToCart'
 import s from './Card.module.css'
 

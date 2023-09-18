@@ -137,3 +137,27 @@ img {
     z-index: 1;
   }
 }
+.cart-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.elipse {
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffa542;
+}
+.quantity-indicator {
+  color: #fff;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

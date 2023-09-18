@@ -11,7 +11,7 @@ export const membersData: IMember[] = [
   {
     name: 'Denis Goncharenko',
     job: 'state employee',
-    photo: 'assets/images/denis.jpg',
+    photo: '/denis.jpg',
     bio: [
       '28 y.o., Khabarovsk, Russia',
       '2013 - 2018: student of Military Univercity in Moscow',
@@ -41,11 +41,11 @@ export const membersData: IMember[] = [
     githubLink: 'https://github.com/TemaTut',
   },
   {
-    name: 'Miras',
-    job: '',
-    photo: '',
-    bio: [],
-    contributions: [],
+    name: 'Miras Suleimen',
+    job: 'Looking for Job',
+    photo: '/miras.jpg',
+    bio: ['nfactorial Incubator 2023 alumni'],
+    contributions: ['Product details page', 'routing', 'and more'],
     githubLink: 'https://github.com/TauAdam',
   },
 ]
