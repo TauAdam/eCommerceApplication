@@ -1,12 +1,14 @@
+import { AddtoCart } from 'components/Card/AddToCart'
+import { getOrCreateCart } from 'components/ProductsGrid/utils'
+import { Slider } from 'components/Slider'
+import { handlePrice } from 'components/share/handleCart'
 import React, { useEffect, useState } from 'react'
+import arrowImage from '../../../src/assets/images/arrow.png'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { setCart } from '../../redux/slices/cartSlice'
 import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
 import { arrowStyle, getProduct, handleAttributes } from './helpFunctions'
-import { getOrCreateCart } from 'components/ProductsGrid/utils'
-import { cartInitialState, handlePrice } from 'components/share/handleCart'
-import arrowImage from '../../../src/assets/images/arrow.png'
-import { Slider } from 'components/Slider'
-import { AddtoCart } from 'components/Card/AddToCart'
 import './style.css'
 
 interface DetailedProductProps {
@@ -24,7 +26,9 @@ const initialProductState: IProduct = {
 
 export function DetailedProduct(props: DetailedProductProps) {
   const [isFavorite, setIsFavorite] = useState(false)
-  const [cart, setCart] = useState(cartInitialState)
+  // const [cart, setCart] = useState(cartInitialState)
+  const { cart } = useAppSelector((state) => state.carts)
+  const dispatch = useAppDispatch()
   const [product, setProduct] = useState<IProduct>(initialProductState)
   const [openFeatures, setOpenFeatures] = useState(false)
 
@@ -37,10 +41,10 @@ export function DetailedProduct(props: DetailedProductProps) {
   useEffect(() => {
     async function getCurrentCart() {
       const cartState = await getOrCreateCart()
-      setCart(cartState)
+      dispatch(setCart(cartState))
     }
     getCurrentCart()
-  }, [])
+  }, [dispatch])
 
   function handleToggleFavorite() {
     // Добавить логику для добавления/удаления товара из избранного
@@ -87,7 +91,9 @@ export function DetailedProduct(props: DetailedProductProps) {
       </div>
       <AddtoCart
         cart={cart}
-        setCart={setCart}
+        setCart={(newCart) => {
+          dispatch(setCart(newCart))
+        }}
         productId={product.id}
         centAmount={handlePrice(originalPrice, discountedPrice)}
         sku={product.sku || ''}
