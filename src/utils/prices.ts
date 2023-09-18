@@ -24,11 +24,25 @@ export function transformPrices(prices?: Price[], country = 'US') {
 export function getFormattedPrice(
   centAmount: number,
   fractionDigits: number,
-  currencyCode: string
+  currencyCode: string,
+  quantity = 1
 ): string {
   const numberFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
   })
-  return numberFormatter.format(centAmount / 10 ** fractionDigits)
+  return numberFormatter.format((centAmount * quantity) / 10 ** fractionDigits)
+}
+export function getPrices(priceObject: Price, quantity = 1) {
+  let discountedPrice
+  const { value, discounted } = priceObject
+  const { centAmount, fractionDigits, currencyCode } = value
+
+  const originalPrice = getFormattedPrice(centAmount, fractionDigits, currencyCode, quantity)
+
+  if (discounted) {
+    const { centAmount: discCentAmount, fractionDigits: discFractionDigits } = discounted.value
+    discountedPrice = getFormattedPrice(discCentAmount, discFractionDigits, currencyCode, quantity)
+  }
+  return { originalPrice, discountedPrice }
 }
