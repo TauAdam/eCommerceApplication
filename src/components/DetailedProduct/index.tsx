@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import arrowImage from '../../../src/assets/images/arrow.png'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { setCart } from '../../redux/slices/cartSlice'
-import { transformPrices } from '../../utils/products'
+import { transformPrices } from '../../utils/prices'
 import { IProduct } from '../share/types'
 import { arrowStyle, getProduct, handleAttributes } from './helpFunctions'
 import './style.css'
@@ -26,7 +26,6 @@ const initialProductState: IProduct = {
 
 export function DetailedProduct(props: DetailedProductProps) {
   const [isFavorite, setIsFavorite] = useState(false)
-  // const [cart, setCart] = useState(cartInitialState)
   const { cart } = useAppSelector((state) => state.carts)
   const dispatch = useAppDispatch()
   const [product, setProduct] = useState<IProduct>(initialProductState)
@@ -47,7 +46,6 @@ export function DetailedProduct(props: DetailedProductProps) {
   }, [dispatch])
 
   function handleToggleFavorite() {
-    // Добавить логику для добавления/удаления товара из избранного
     setIsFavorite(!isFavorite)
   }
 

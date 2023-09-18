@@ -143,8 +143,8 @@ img {
   align-items: center;
 }
 .elipse {
-  width: 18px;
-  height: 18px;
+  width: 21px;
+  height: 21px;
   flex-shrink: 0;
   border-radius: 50%;
   display: flex;

@@ -14,6 +14,7 @@ import { AboutUsPage } from 'pages/AboutUs'
 import ErrorPage from './pages/Error/ErrorPage'
 import Profile from './pages/Profile'
 import { store } from './redux/store/store'
+import { CartPage } from './pages/CartPage'
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,11 @@ const router = createBrowserRouter([
   {
     path: '/aboutus',
     element: <AboutUsPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/cart',
+    element: <CartPage />,
     errorElement: <ErrorPage />,
   },
 ])
