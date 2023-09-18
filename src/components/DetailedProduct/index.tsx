@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
 import { arrowStyle, getProduct, handleAttributes } from './helpFunctions'
+import { getOrCreateCart } from 'components/ProductsGrid/utils'
+import { cartInitialState, handlePrice } from 'components/share/handleCart'
 import arrowImage from '../../../src/assets/images/arrow.png'
 import { Slider } from 'components/Slider'
+import { AddtoCart } from 'components/Card/AddToCart'
 import './style.css'
 
 interface DetailedProductProps {
@@ -21,7 +24,7 @@ const initialProductState: IProduct = {
 
 export function DetailedProduct(props: DetailedProductProps) {
   const [isFavorite, setIsFavorite] = useState(false)
-  const [isInCart, setIsInCart] = useState(false)
+  const [cart, setCart] = useState(cartInitialState)
   const [product, setProduct] = useState<IProduct>(initialProductState)
   const [openFeatures, setOpenFeatures] = useState(false)
 
@@ -31,14 +34,13 @@ export function DetailedProduct(props: DetailedProductProps) {
     getProduct(props.id, setProduct)
   }, [props.id])
 
-  // useEffect(() => {
-  //   addProductImage('30a61993-fdda-4b60-9127-8c4a9785bd1a', necklaceImg, 400, 400, 1, 4)
-  // }, [props.id])
-
-  function handleAddToCart() {
-    // Добавить логику для добавления товара в корзину
-    setIsInCart(true)
-  }
+  useEffect(() => {
+    async function getCurrentCart() {
+      const cartState = await getOrCreateCart()
+      setCart(cartState)
+    }
+    getCurrentCart()
+  }, [])
 
   function handleToggleFavorite() {
     // Добавить логику для добавления/удаления товара из избранного
@@ -83,10 +85,14 @@ export function DetailedProduct(props: DetailedProductProps) {
           )}
         </div>
       </div>
+      <AddtoCart
+        cart={cart}
+        setCart={setCart}
+        productId={product.id}
+        centAmount={handlePrice(originalPrice, discountedPrice)}
+        sku={product.sku || ''}
+      />
       <div className="detailed-product__button-wrapper">
-        <button onClick={handleAddToCart} disabled={isInCart}>
-          {isInCart ? 'In Cart' : 'Add to Cart'}
-        </button>
         <button onClick={handleToggleFavorite}>
           {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
         </button>

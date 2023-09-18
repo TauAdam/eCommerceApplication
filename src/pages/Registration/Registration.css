@@ -68,16 +68,14 @@
   }
 
   .address-container .input-label {
-    display: flex;
-    justify-content: center;
     position: relative;
     right: 3.5rem;
+    display: flex;
+    justify-content: center;
     width: 80%;
   }
 
   .input-label span {
-    position: absolute;
-    left: 5vw;
     display: block;
     width: 7rem;
     font-size: 0.75rem;

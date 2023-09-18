@@ -2,22 +2,29 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { transformPrices } from '../../utils/products'
 import { IProduct } from '../share/types'
+import { Cart } from '@commercetools/platform-sdk'
+import { handlePrice } from 'components/share/handleCart'
+import { AddtoCart } from './AddToCart'
 import s from './Card.module.css'
 
 interface Props {
   item: IProduct
+  cart: Cart
+  setCart: (arg: Cart) => void
 }
 
-export function Card({ item }: Props) {
+export function Card({ item, cart, setCart }: Props) {
   const { prices, name, id, images, description } = item
   const { originalPrice, discountedPrice } = transformPrices(prices)
 
   return (
-    <Link to={`/catalog/${id}`}>
+    <>
       <div className={s.card}>
-        <div className={s.imgContainer}>
-          <img className={s.image} src={images[0]} alt={name} />
-        </div>
+        <Link to={`/catalog/${id}`}>
+          <div className={s.imgContainer}>
+            <img className={s.image} src={images[0]} alt={name} />
+          </div>
+        </Link>
         <div className={s.cardContent}>
           <div className={s.row}>
             <div className={s.name}>{name}</div>
@@ -35,8 +42,17 @@ export function Card({ item }: Props) {
             )}
           </div>
           <div className={s.description}>{description}</div>
+          <AddtoCart
+            {...{
+              cart,
+              setCart,
+              productId: item.id,
+              centAmount: handlePrice(originalPrice, discountedPrice),
+              sku: item.sku || '',
+            }}
+          />
         </div>
       </div>
-    </Link>
+    </>
   )
 }

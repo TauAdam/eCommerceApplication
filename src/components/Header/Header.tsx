@@ -39,11 +39,6 @@ const Header = () => {
         <Link to="/">
           <img src={logo} alt="Logo" />
         </Link>
-        <div className={`burger__icon ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -77,6 +72,9 @@ const Header = () => {
               <Link to="/profile">My profile</Link>
             </li>
           )}
+          <li className={`nav__item ${location.pathname === '/aboutus' ? 'active' : ''}`}>
+            <Link to="/aboutus">About us</Link>
+          </li>
           {isAuthenticated && (
             <li className={`nav__item ${location.pathname === '/exit' ? 'active' : ''}`}>
               <Link to="/" onClick={handleExitClick}>

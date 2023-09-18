@@ -50,14 +50,18 @@
 }
 
 .detailed-product .product-description {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .detailed-product .product-features {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.detailed-product .product-features ul {
+  margin-bottom: 0;
 }
 
 .product-features__arrow {
@@ -105,10 +109,6 @@
   cursor: not-allowed;
 }
 
-.detailed-product__button-wrapper button:nth-child(1) {
-  margin-right: 10px;
-}
-
 .detailed-product button:hover {
   font-weight: 600;
 }
@@ -131,6 +131,7 @@
 .prices-block {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 }
 .price-discounted,
 .product-price {

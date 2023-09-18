@@ -7,6 +7,7 @@ export function parseFetchedData(products: Product[]) {
     const description = product.masterData.staged.description?.['en'] || 'Sample description'
     const prices = product.masterData.current.masterVariant.prices
     const attributes = product.masterData.current.masterVariant.attributes
+    const sku = product.masterData.staged.masterVariant.sku
 
     return {
       name,
@@ -15,6 +16,7 @@ export function parseFetchedData(products: Product[]) {
       id: product.id,
       prices,
       attributes,
+      sku,
     }
   })
 
