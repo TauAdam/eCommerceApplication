@@ -110,14 +110,14 @@ export function AddtoCart({ cart, setCart, sku, productId }: Props) {
             {showInput && (
               <>
                 <span>Select quantity:</span>
-                <input type="number" defaultValue={amount} ref={manualQuantity} />
+                <input min={0} type="number" defaultValue={amount} ref={manualQuantity} />
                 <span
                   className={s.PointerBold}
                   onClick={async () => {
                     const input = manualQuantity.current as unknown as HTMLInputElement
                     if (input) {
                       const newAmount = Number(input.value)
-                      if (amount < 0) return
+                      if (newAmount < 0) return
                       if (lineItemId === '') {
                         const newCart = await addToCart(cart.id, cart.version, sku, newAmount)
                         setCart(newCart)
