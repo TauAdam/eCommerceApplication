@@ -314,3 +314,54 @@ export async function removeFromCart(id: string, version: number, lineItemId: st
     throw error
   }
 }
+
+function getCartIdFromLocal() {
+  let currentInfo = getFromLocal('customer')
+  if (currentInfo === null) currentInfo = getFromLocal('anonymous')
+  if (currentInfo === null) {
+    console.warn('cart id not found in local storage!')
+    return null
+  } else {
+    return currentInfo.card_id
+  }
+}
+
+export async function removeMyCart(version: number) {
+  const card_id = getCartIdFromLocal()
+  if (card_id === null) return
+  const accessToken = await getTokenFromLocal()
+  console.log('Cart id:', card_id)
+  console.log('Access token:', accessToken)
+
+  const url = `${apiYrl}/${projectKey}/me/carts/${card_id}?version=${version}`
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  }
+
+  try {
+    const response = await fetch(url, { method: 'DELETE', headers })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    console.log('Ответ сервера:', data)
+
+    const customer = getFromLocal('customer')
+    if (customer) {
+      delete customer.card_id
+      localStorage.setItem('customer', JSON.stringify(customer))
+    }
+    const anonymous = getFromLocal('anonymous')
+    if (anonymous) {
+      delete anonymous.card_id
+      localStorage.setItem('anonymous', JSON.stringify(anonymous))
+    }
+
+    // Перезагрузка страницы после успешного выполнения запроса
+    window.location.reload()
+  } catch (error) {
+    console.error('Ошибка при выполнении запроса:', error)
+  }
+}

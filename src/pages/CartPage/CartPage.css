@@ -54,6 +54,11 @@
   font-weight: 600;
   line-height: normal;
 }
+
+.empty-cart__link:hover {
+  cursor: pointer;
+}
+
 @media (max-width: 790px) {
   .empty-cart__image {
     width: 255px;

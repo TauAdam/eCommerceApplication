@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import { setCart } from '../../redux/slices/cartSlice'
 import { getFormattedPrice, getPrices } from '../../utils/prices'
 import './CartPage.css'
+import { removeMyCart } from 'utils/cart'
 
 export function CartPage() {
   const { cart } = useAppSelector((state) => state.carts)
@@ -63,6 +64,14 @@ export function CartPage() {
             <p>
               Total Price:
               {getFormattedPrice(centAmount, fractionDigits, currencyCode)}
+            </p>
+            <p
+              className="empty-cart__link"
+              onClick={() => {
+                removeMyCart(cart.version)
+              }}
+            >
+              Clear
             </p>
           </>
         ) : (
