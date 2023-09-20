@@ -85,3 +85,17 @@
     width: 350px;
   }
 }
+
+.total-price {
+  color: #000;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.line-items {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
