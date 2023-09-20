@@ -46,7 +46,7 @@
     opacity: 0.9;
   }
 
-  color: #fff;
+  color: #ffffff;
   text-align: center;
   font-family: Montserrat;
   font-size: 20px;
@@ -56,6 +56,33 @@
 }
 
 .empty-cart__link:hover {
+  cursor: pointer;
+}
+
+.promocode-summary {
+  font-family: Montserrat, sans-serif;
+  margin-right: 1rem;
+}
+
+.used-promocode {
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.clear-promocode {
+  cursor: pointer;
+}
+
+.discounts-input {
+  margin-right: 1rem;
+}
+
+.promocode-accept {
+  margin-bottom: 1rem;
+  background: #101010;
+  color: #ffffff;
+  font-weight: 600;
   cursor: pointer;
 }
 

@@ -1,0 +1,34 @@
+.discounts-wrapper {
+  margin-left: 2rem;
+}
+
+.discounts-header {
+  margin-bottom: 0.5rem;
+  color: #101010;
+}
+
+.discounts-list {
+  list-style: none;
+}
+
+.discounts-list__code {
+  display: inline-block;
+  margin-right: 0.5rem;
+  height: 1.5rem;
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #101010;
+  transition: all 0.3s;
+}
+
+.discounts-list__code:hover {
+  transform: scale(1.1);
+  margin-right: 0.75rem;
+  color: #000000
+}
+
+.discounts-list__description {
+  display: inline-block;
+  height: 1.5rem;
+}
