@@ -1,14 +1,14 @@
 import { Price } from '@commercetools/platform-sdk'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { removeMyCart } from 'utils/cart'
 import Footer from '../../components/Footer/Footer'
 import Header from '../../components/Header/Header'
 import { getOrCreateCart } from '../../components/ProductsGrid/utils'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { setCart } from '../../redux/slices/cartSlice'
+import { deleteCart, setCart } from '../../redux/slices/cartSlice'
 import { getFormattedPrice, getPrices } from '../../utils/prices'
 import './CartPage.css'
-import { removeMyCart } from 'utils/cart'
 
 export function CartPage() {
   const { cart } = useAppSelector((state) => state.carts)
@@ -69,6 +69,7 @@ export function CartPage() {
               className="empty-cart__link"
               onClick={() => {
                 removeMyCart(cart.version)
+                dispatch(deleteCart())
               }}
             >
               Clear

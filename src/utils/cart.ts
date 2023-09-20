@@ -358,9 +358,6 @@ export async function removeMyCart(version: number) {
       delete anonymous.card_id
       localStorage.setItem('anonymous', JSON.stringify(anonymous))
     }
-
-    // Перезагрузка страницы после успешного выполнения запроса
-    window.location.reload()
   } catch (error) {
     console.error('Ошибка при выполнении запроса:', error)
   }
