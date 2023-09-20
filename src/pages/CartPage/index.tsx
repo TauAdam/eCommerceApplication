@@ -5,7 +5,7 @@ import { getOrCreateCart } from '../../components/ProductsGrid/utils'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { deleteCart, setCart } from '../../redux/slices/cartSlice'
 import { getFormattedPrice } from '../../utils/prices'
-import { setCartDiscountActive } from 'utils/discount'
+import { getCartDiscount, setCartDiscountActive } from 'utils/discount'
 import { CartItem } from '../../components/CartItem'
 import Footer from '../../components/Footer/Footer'
 import Header from '../../components/Header/Header'
@@ -25,14 +25,14 @@ export function CartPage() {
     getCurrentCart()
   }, [dispatch, usedPromo])
 
-  // useEffect(() => {
-  //   async function removePromocode() {
-  //     const cartDiscount = await getCartDiscount('discount10')
-  //     if (cartDiscount.isActive) setCartDiscountActive(false, 'discount10')
-  //   }
+  useEffect(() => {
+    async function removePromocode() {
+      const cartDiscount = await getCartDiscount('discount10')
+      if (cartDiscount.isActive) setCartDiscountActive(false, 'discount10')
+    }
 
-  //   removePromocode()
-  // }, [])
+    removePromocode()
+  }, [])
 
   const { centAmount, fractionDigits, currencyCode } = cart.totalPrice
   const { lineItems } = cart
@@ -77,7 +77,7 @@ export function CartPage() {
           </div>
         )}
         <div className="discounts-summary">
-          <h4 className="discounts-header">Used promocodes:</h4>
+          <h4 className="discounts-header">Used promocodes: {usedPromo.length === 0 && 'no'}</h4>
           <ul className="promocode-summary">
             {usedPromo.map((promo) => {
               return (
@@ -96,6 +96,11 @@ export function CartPage() {
               )
             })}
           </ul>
+          <h5 className="discounts-warn">
+            {
+              'Чтобы увидеть обновленную цену, измените количество какого-либо товара в Вашей корзине :)'
+            }
+          </h5>
         </div>
         <input
           className="discounts-input"
