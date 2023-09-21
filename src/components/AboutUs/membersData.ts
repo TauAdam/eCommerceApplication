@@ -55,7 +55,7 @@ export const membersData: IMember[] = [
     job: 'Looking for Job',
     photo: '/miras.jpg',
     bio: ['nfactorial Incubator 2023 alumni'],
-    contributions: ['Product details page', 'routing', 'and more'],
+    contributions: ['Product details page', 'routing', 'cart page', 'work with prices', 'and more'],
     githubLink: 'https://github.com/TauAdam',
   },
 ]
