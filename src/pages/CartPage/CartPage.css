@@ -46,7 +46,7 @@
     opacity: 0.9;
   }
 
-  color: #fff;
+  color: #ffffff;
   text-align: center;
   font-family: Montserrat;
   font-size: 20px;
@@ -54,6 +54,42 @@
   font-weight: 600;
   line-height: normal;
 }
+
+.empty-cart__link:hover {
+  cursor: pointer;
+}
+
+.discounts-warn {
+  margin: 0 0 0.5rem 0;
+}
+
+.promocode-summary {
+  font-family: Montserrat, sans-serif;
+  margin-right: 1rem;
+}
+
+.used-promocode {
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.clear-promocode {
+  cursor: pointer;
+}
+
+.discounts-input {
+  margin-right: 1rem;
+}
+
+.promocode-accept {
+  margin-bottom: 1rem;
+  background: #101010;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 @media (max-width: 790px) {
   .empty-cart__image {
     width: 255px;
@@ -79,4 +115,18 @@
   .empty-cart__link {
     width: 350px;
   }
+}
+
+.total-price {
+  color: #000;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.line-items {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
 }

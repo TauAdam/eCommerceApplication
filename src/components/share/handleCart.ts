@@ -13,6 +13,5 @@ export const getLineItemId = (cart: Cart, productID: string) => {
 
 export const setInitialAmount = (cart: Cart, productID: string) => {
   const lineItem = cart.lineItems.find((item) => item.productId === productID)
-  console.log(lineItem)
   return lineItem?.quantity || 0
 }

@@ -1,0 +1,79 @@
+.item {
+  width: 633px;
+  height: 218px;
+  flex-shrink: 0;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 17px;
+}
+.name {
+  color: #1c1c27;
+  font-family: Montserrat;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.textBlock {
+}
+.img {
+  height: 136px;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+.deleteIcon {
+  width: 19.928px;
+  height: 17px;
+  flex-shrink: 0;
+}
+.cost {
+  color: #1c1c27;
+  text-align: right;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.amount {
+  color: #000;
+  font-family: Montserrat;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.addRemoveBtn {
+  cursor: pointer;
+}
+.quantityBlock {
+  width: 125px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@media (max-width: 790px) {
+  .item {
+    width: 370px;
+    height: 162px;
+    flex-shrink: 0;
+  }
+  .name {
+    color: #1c1c27;
+    font-family: Montserrat;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .img {
+    height: 76px;
+  }
+}

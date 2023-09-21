@@ -34,10 +34,20 @@ export const membersData: IMember[] = [
   },
   {
     name: 'Artem',
-    job: '',
-    photo: '',
-    bio: [],
-    contributions: [],
+    job: 'Looking for Job',
+    photo: '/artem.jpg',
+    bio: [
+      '29 y.o., Samara, Russia',
+      '2011 - 2016: student of Samara State Transport University',
+      '2022 - now: RS School trainee frontend developer',
+    ],
+    contributions: [
+      'Writing Components',
+      'Creating API requests',
+      'Trello watcher',
+      'Layout of duplicate components',
+      'project deployment',
+    ],
     githubLink: 'https://github.com/TemaTut',
   },
   {
@@ -45,7 +55,7 @@ export const membersData: IMember[] = [
     job: 'Looking for Job',
     photo: '/miras.jpg',
     bio: ['nfactorial Incubator 2023 alumni'],
-    contributions: ['Product details page', 'routing', 'and more'],
+    contributions: ['Product details page', 'routing', 'cart page', 'work with prices', 'and more'],
     githubLink: 'https://github.com/TauAdam',
   },
 ]

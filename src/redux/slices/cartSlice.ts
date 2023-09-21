@@ -44,8 +44,11 @@ const cartSlice = createSlice({
     setCart(state, action: PayloadAction<Cart>) {
       state.cart = action.payload
     },
+    deleteCart(state) {
+      state.cart = initialState.cart
+    },
   },
 })
-export const { setCart } = cartSlice.actions
+export const { setCart, deleteCart } = cartSlice.actions
 
 export default cartSlice.reducer

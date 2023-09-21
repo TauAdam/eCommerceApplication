@@ -1,16 +1,20 @@
-import { Price } from '@commercetools/platform-sdk'
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Footer from '../../components/Footer/Footer'
-import Header from '../../components/Header/Header'
+import { removeMyCart } from 'utils/cart'
 import { getOrCreateCart } from '../../components/ProductsGrid/utils'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { setCart } from '../../redux/slices/cartSlice'
-import { getFormattedPrice, getPrices } from '../../utils/prices'
+import { deleteCart, setCart } from '../../redux/slices/cartSlice'
+import { getFormattedPrice } from '../../utils/prices'
+import { getCartDiscount, setCartDiscountActive } from 'utils/discount'
+import { CartItem } from '../../components/CartItem'
+import Footer from '../../components/Footer/Footer'
+import Header from '../../components/Header/Header'
 import './CartPage.css'
 
 export function CartPage() {
   const { cart } = useAppSelector((state) => state.carts)
+  const [promo, setPromo] = useState('')
+  const [usedPromo, setUsedPromo] = useState([] as string[])
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -19,50 +23,43 @@ export function CartPage() {
       dispatch(setCart(cartState))
     }
     getCurrentCart()
-  }, [dispatch])
+  }, [dispatch, usedPromo])
+
+  useEffect(() => {
+    async function removePromocode() {
+      const cartDiscount = await getCartDiscount('discount10')
+      if (cartDiscount.isActive) setCartDiscountActive(false, 'discount10')
+    }
+
+    removePromocode()
+  }, [])
 
   const { centAmount, fractionDigits, currencyCode } = cart.totalPrice
   const { lineItems } = cart
 
-  function renderPrice(priceObject: Price) {
-    const { discountedPrice, originalPrice } = getPrices(priceObject)
-
-    return (
-      <div className="prices-block">
-        {discountedPrice ? (
-          <>
-            <span className="price-discounted">{discountedPrice}</span>
-            <span className="price-original">{originalPrice}</span>
-          </>
-        ) : (
-          <p className="product-price">{originalPrice}</p>
-        )}
-      </div>
-    )
-  }
-  function countTotalCost(priceObject: Price, quantity: number) {
-    const { discountedPrice, originalPrice } = getPrices(priceObject, quantity)
-    return discountedPrice ? discountedPrice : originalPrice
-  }
   return (
     <div className="wrapperApp">
       <div className="box">
         <Header />
         {lineItems.length ? (
           <>
-            <ul>
+            <div className="line-items">
               {lineItems.map((el) => (
-                <li key={el.id} className="cart-item">
-                  <img src={el.variant.images?.[0].url} alt={el.name['en-US']} />
-                  <p>{el.name['en-US']}</p>
-                  {renderPrice(el.price)}
-                  <p>Total Cost: {countTotalCost(el.price, el.quantity)}</p>
-                </li>
+                <CartItem key={el.id} item={el} />
               ))}
-            </ul>
-            <p>
+            </div>
+            <div className="total-price">
               Total Price:
               {getFormattedPrice(centAmount, fractionDigits, currencyCode)}
+            </div>
+            <p
+              className="empty-cart__link"
+              onClick={() => {
+                removeMyCart(cart.version)
+                dispatch(deleteCart())
+              }}
+            >
+              Clear
             </p>
           </>
         ) : (
@@ -70,13 +67,58 @@ export function CartPage() {
             <img src="/empty-cart.png" alt="empty cart" className="empty-cart__image" />
             <div>
               <div className="empty-cart__text">Cart is empty</div>
-              <div className="empty-cart__text_desc">But it&apos;s never too late to fix it :)</div>
+              <div className="empty-cart__text_desc">
+                {'But it&apos;s never too late to fix it :)'}
+              </div>
             </div>
             <Link to={'/catalog'} className="empty-cart__link">
               Start shopping now
             </Link>
           </div>
         )}
+        <div className="discounts-summary">
+          <h4 className="discounts-header">Used promocodes: {usedPromo.length === 0 && 'no'}</h4>
+          <ul className="promocode-summary">
+            {usedPromo.map((promo) => {
+              return (
+                <li key={promo}>
+                  <span className="used-promocode">{promo}</span>
+                  <span
+                    className="clear-promocode"
+                    onClick={async () => {
+                      await setCartDiscountActive(false, promo)
+                      setUsedPromo(usedPromo.filter((code) => code !== promo))
+                    }}
+                  >
+                    delete
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+          <h5 className="discounts-warn">
+            {
+              'Чтобы увидеть обновленную цену, измените количество какого-либо товара в Вашей корзине :)'
+            }
+          </h5>
+        </div>
+        <input
+          className="discounts-input"
+          type="text"
+          placeholder="use promocode"
+          onChange={(event) => {
+            setPromo(event.target.value)
+          }}
+        ></input>
+        <button
+          className="promocode-accept"
+          onClick={async () => {
+            const cartDiscount = await setCartDiscountActive(true, promo)
+            if (cartDiscount && usedPromo.indexOf(promo) === -1) setUsedPromo([...usedPromo, promo])
+          }}
+        >
+          Accept promocode
+        </button>
         <Footer />
       </div>
     </div>

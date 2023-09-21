@@ -28,8 +28,6 @@ const Header = () => {
     localStorage.removeItem('customer')
   }
 
-  console.log('isAuthenticated:', isAuthenticated)
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
