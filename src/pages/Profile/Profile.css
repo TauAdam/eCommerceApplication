@@ -1,0 +1,21 @@
+@font-face {
+    font-weight: 400;
+    font-family: Montserrat;
+    src: url('../../assets/fonts/Montserrat-Regular.ttf');
+  }
+
+@font-face {
+  font-weight: 600;
+  font-family: Montserrat;
+  src: url('../../assets/fonts/Montserrat-SemiBold.ttf');
+}
+
+.profile {
+    position: relative;
+    max-width: 950px;
+    margin: auto;
+    height: fit-content;
+    padding: 1rem;
+    background: #ffffff;
+    font-family: Montserrat, sans-serif;
+}

@@ -1,0 +1,153 @@
+@font-face {
+    font-weight: 400;
+    font-family: Montserrat;
+    src: url('../../assets/fonts/Montserrat-Regular.ttf');
+  }
+
+@font-face {
+  font-weight: 600;
+  font-family: Montserrat;
+  src: url('../../assets/fonts/Montserrat-SemiBold.ttf');
+}
+
+.profile__button {
+  display: block;
+  margin: 0.5rem auto;
+  border: 1px solid #101010;
+  background-color: #101010;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile__button:hover {
+  color: #101010;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+}
+
+.title-wrapper {
+  position: relative;
+}
+
+.profile__title {
+  width: 100%;
+  text-align: center;
+}
+
+.title__image {
+  position: absolute;
+  top: 50%;
+  right: 32px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.field-wrapper {
+  position: relative;
+  left: -50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 450px;
+  margin: 0.5rem auto;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.field-wrapper span {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.field {
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+  width: 350px;
+  border-radius: 15px;
+  background-color: #d6d6d6;
+  border: 1px solid #d6d6d6;
+  font-size: 1rem;
+  color: #101010;
+  flex-shrink: 0;
+}
+
+.field::placeholder {
+  opacity: 0.5;
+}
+
+.field-error {
+  border: 1px solid red;
+}
+
+.password-wrapper * {
+  display: block;
+  margin: 0.5rem auto;
+}
+
+.password__button {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #ffa542;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.password__button:hover {
+  color: #101010
+}
+
+.address__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.address__section {
+  width: 45%;
+  border-bottom: 1px solid #101010;
+  margin-bottom: 1rem;
+}
+
+.address__section label {
+  margin-left: 50px;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  cursor: default;
+}
+
+.address__section label.active {
+  cursor: pointer;
+}
+
+.address__section .field-wrapper {
+  left: 0;
+  width: 75%;
+}
+
+.address__section .field-wrapper .field {
+  width: auto;
+  flex-grow: 2;
+}
+
+.address__edit-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 50px 0 auto;
+  width: fit-content;
+  height: 32px;
+  cursor: pointer;
+}
+
+.address__edit-wrapper .address__edit {
+  height: 24px;
+  width: 24px;
+  display: block;
+}
+
+.address__edit-wrapper span {
+  display: block;
+  margin: 0 0.5rem 0 auto;
+  padding-top: 4px;
+  font-size: 0.8rem;
+}

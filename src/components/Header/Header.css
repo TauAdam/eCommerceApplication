@@ -1,0 +1,163 @@
+.background {
+  display: flex;
+  justify-content: center;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+img {
+  display: block;
+  height: 30px;
+}
+
+.nav__list {
+  display: flex;
+  padding-left: 1rem;
+  gap: 30px;
+  list-style-type: none;
+}
+
+.nav__item {
+  white-space: nowrap;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.nav__item:hover {
+  cursor: pointer;
+  color: #ffa542;
+}
+
+.burger__icon {
+  display: none;
+  cursor: pointer;
+}
+
+.burger__icon span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: black;
+  margin: 5px 0;
+  transition: transform 0.5s ease;
+}
+
+.burger__icon.open {
+  z-index: 3;
+}
+
+.burger__icon.open span:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.burger__icon.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger__icon.open span:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+.basket {
+  display: block;
+  margin-left: auto;
+}
+
+@media (max-width: 1050px) {
+  .nav__list {
+    gap: 20px;
+  }
+
+  .basket {
+    left: 35%;
+  }
+}
+
+@media (max-width: 790px) {
+  .wrapper {
+    display: flex;
+    min-width: 100vw;
+    padding: 15px;
+  }
+
+  .nav__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 80%;
+    height: 100vh;
+    margin: 0;
+    top: 0;
+    right: 0;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-100%);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+    z-index: 0;
+  }
+
+  .nav__list.open {
+    position: fixed;
+    top: 0;
+    right: 0;
+    transform: translateX(-100%);
+    height: 100vh;
+    gap: 10%;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    text-decoration: underline;
+    z-index: 2;
+  }
+
+  .basket {
+    margin-right: 2rem;
+    z-index: 3;
+  }
+
+  .burger__icon {
+    display: block;
+    z-index: 1;
+  }
+}
+.cart-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.elipse {
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffa542;
+}
+.quantity-indicator {
+  color: #fff;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

@@ -1,0 +1,24 @@
+.about {
+  background-color: #ffffff;
+  padding: 5% 10%;
+}
+
+.memberPhoto {
+  border-radius: 50px;
+  margin: 0 2rem;
+  width: 350px;
+  height: 300px;
+  float: right;
+}
+.rs-school-logo {
+  display: block;
+  height: 50px;
+}
+.rs-school-logo__img {
+  margin: 0 auto;
+  height: 100%;
+  transition: all 0.3s;
+  &:hover {
+    transform: scale(1.2);
+  }
+}

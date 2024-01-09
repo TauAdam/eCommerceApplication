@@ -1,16 +1,20 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import App from './App'
-import contactReducer from './redux/slices/contactSlice'
 
+import Enter from 'pages/Enter/Enter'
+import Registration from 'pages/Registration/Registration'
 import './index.css'
+import { CatalogPage } from './pages/CatalogPage'
+import { DetailedProductPage } from './pages/DetailedProductPage'
+import { AboutUsPage } from 'pages/AboutUs'
 import ErrorPage from './pages/Error/ErrorPage'
-import Contact from './routers/Contact'
+import Profile from './pages/Profile'
+import { store } from './redux/store/store'
+import { CartPage } from './pages/CartPage'
 
 const router = createBrowserRouter([
   {
@@ -19,16 +23,41 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'contacts/:contactId',
-    element: <Contact />,
+    path: '/login',
+    element: <Enter />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/signup',
+    element: <Registration />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/profile',
+    element: <Profile />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/catalog',
+    element: <CatalogPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/catalog/:productId',
+    element: <DetailedProductPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/aboutus',
+    element: <AboutUsPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/cart',
+    element: <CartPage />,
+    errorElement: <ErrorPage />,
   },
 ])
-
-const store = configureStore({
-  reducer: {
-    contacts: contactReducer,
-  },
-})
 
 const rootElement = document.getElementById('root')
 

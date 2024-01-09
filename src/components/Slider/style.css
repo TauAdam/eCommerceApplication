@@ -1,0 +1,43 @@
+.product-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+.product-modal .image-wrapper {
+  position: relative;
+  top: 15%;
+  padding: 20px;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF;
+}
+
+.product-modal .swiper {
+  position: relative;
+  top: 15%;
+  width: 90vw;
+  height: 50vh;
+  background-color: #FFF;
+}
+
+.product-modal .swiper .image-wrapper {
+  top: 0;
+  height: 85%;
+}
+
+.product-modal .product-image {
+  padding: 20px;
+  background-color: #FFF;
+  border-radius: 30px;
+  transform: scale(1.5);
+  cursor: auto;
+}
